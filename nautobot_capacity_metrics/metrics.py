@@ -159,3 +159,307 @@ def collect_extras_metric(funcs):
                 logger.warning("Extra metric didn't return a Metric object, skipping ... ")
                 continue
             yield metric
+
+
+
+#------------------------------------------------------------------------------
+# 2. DevOps Automation & Deployment Metrics
+#------------------------------------------------------------------------------
+
+
+# Deployment frequency (e.g., number of deployments per day/week)
+ntc_deployment_frequency = Gauge(
+    'ntc_devops_deployment_frequency',
+    'Number of deployments (e.g., per day) to production.'
+)
+
+
+# Change failure rate (percentage of changes/deployments that fail or require rollback)
+ntc_change_failure_rate = Gauge(
+    'ntc_devops_change_failure_rate',
+    'Percentage of changes or deployments that fail.'
+)
+
+
+# Mean time to recover (MTTR) for incidents
+ntc_mttr = Gauge(
+    'ntc_devops_mttr',
+    'Mean time to recover from incidents in minutes.'
+)
+
+
+# Automation efficiency (percentage of tasks automated vs. manual)
+ntc_automation_efficiency = Gauge(
+    'ntc_devops_automation_efficiency',
+    'Percentage of processes or tasks automated vs. manual.'
+)
+
+
+#------------------------------------------------------------------------------
+# 3. User Engagement & Application Metrics
+#------------------------------------------------------------------------------
+
+
+# Active user sessions in the application (could be labeled by environment, role, etc.)
+ntc_user_session_count = Gauge(
+    'ntc_user_session_count',
+    'Number of concurrent or active user sessions.',
+    labelnames=['environment', 'role']
+)
+
+
+# Page load or workflow duration times (aggregated or average)
+ntc_user_page_load_time = Gauge(
+    'ntc_user_page_load_time',
+    'Average page load or workflow duration time (ms).'
+)
+
+
+# Tracks user interactions or clicks for telemetry
+ntc_user_click_events = Counter(
+    'ntc_user_click_events',
+    'Count of key user interactions or click events (increment only).'
+)
+
+
+#------------------------------------------------------------------------------
+# 4. Plugin & Integration Metrics
+#------------------------------------------------------------------------------
+
+
+# Job volume for a given plugin (e.g., Golden Config, SSoT, etc.)
+ntc_plugin_job_volume = Counter(
+    'ntc_plugin_job_volume',
+    'Count of jobs run by a given plugin.',
+    labelnames=['plugin_name']
+)
+
+
+# Success rate or fraction for plugin jobs
+ntc_plugin_job_success_rate = Gauge(
+    'ntc_plugin_job_success_rate',
+    'Success rate (0-1) for plugin jobs.',
+    labelnames=['plugin_name']
+)
+
+
+# Execution time (seconds) for plugin jobs
+ntc_plugin_job_execution_time = Histogram(
+    'ntc_plugin_job_execution_time',
+    'Histogram of execution times (in seconds) for plugin jobs.',
+    labelnames=['plugin_name'],
+    buckets=[0.5, 1.0, 2.0, 5.0, 10.0, 30.0, 60.0, 120.0, float('inf')]
+)
+
+
+# Integration-specific metrics:
+#  A. Golden Config Status
+ntc_integration_golden_config_status = Gauge(
+    'ntc_integration_golden_config_status',
+    'Tracks the latest Golden Config job status (0=failure,1=success).',
+    labelnames=['device_name']
+)
+
+
+#  B. SSoT Sync Time
+ntc_integration_ssot_sync_time = Histogram(
+    'ntc_integration_ssot_sync_time',
+    'Time taken (in seconds) for SSoT syncs to complete.',
+    buckets=[1.0, 5.0, 10.0, 30.0, 60.0, 120.0, float('inf')]
+)
+
+
+#  C. FSD-LVC Job Outcome
+ntc_integration_fsd_lvc_job_outcome = Gauge(
+    'ntc_integration_fsd_lvc_job_outcome',
+    'Tracks the outcome of FSD-LVC job runs (0=failure,1=success).'
+)
+
+
+# Future integrations (APIs, WebHooks, etc.)
+ntc_integration_api_call_volume = Counter(
+    'ntc_integration_api_call_volume',
+    'Number of calls made to external or internal APIs.'
+)
+
+
+ntc_integration_webhook_event_rate = Counter(
+    'ntc_integration_webhook_event_rate',
+    'Number of webhook events processed.'
+)
+
+
+#------------------------------------------------------------------------------
+# 5. Compliance & Configuration Metrics
+#------------------------------------------------------------------------------
+
+
+# Compliance ratio (percentage or fraction)
+ntc_compliance_ratio = Gauge(
+    'ntc_compliance_ratio',
+    'Overall compliance ratio across device/config checks.'
+)
+
+
+# Failed compliance checks
+ntc_failed_compliance_checks = Gauge(
+    'ntc_failed_compliance_checks',
+    'Number of failed compliance checks.'
+)
+
+
+
+
+# ------------------------------------------------------------------------------
+# 1. ROI & Business Impact Metrics
+# ------------------------------------------------------------------------------
+ntc_roi_metric = Gauge(
+    'ntc_roi',
+    'Overall ROI for the NTC project (e.g., ratio or percentage).'
+)
+
+
+ntc_cost_savings = Gauge(
+    'ntc_cost_savings',
+    'Total cost savings in USD attributed to automation and improvements.'
+)
+
+
+ntc_time_saved_hours = Gauge(
+    'ntc_time_saved_hours',
+    'Total time saved (in hours) across automated tasks.'
+)
+
+
+
+
+# ------------------------------------------------------------------------------
+# 2. DevOps Automation & Deployment Metrics
+# ------------------------------------------------------------------------------
+ntc_deployment_frequency = Gauge(
+    'ntc_devops_deployment_frequency',
+    'Number of deployments (e.g., per day) to production.'
+)
+
+
+ntc_change_failure_rate = Gauge(
+    'ntc_devops_change_failure_rate',
+    'Percentage of changes or deployments that fail.'
+)
+
+
+ntc_mttr = Gauge(
+    'ntc_devops_mttr',
+    'Mean time (minutes) to recover from incidents.'
+)
+
+
+ntc_automation_efficiency = Gauge(
+    'ntc_devops_automation_efficiency',
+    'Percentage of processes or tasks automated vs. manual.'
+)
+
+
+
+
+# ------------------------------------------------------------------------------
+# 3. User Engagement & Application Metrics
+# ------------------------------------------------------------------------------
+ntc_user_session_count = Gauge(
+    'ntc_user_session_count',
+    'Number of concurrent/active user sessions, labeled by environment & role.',
+    labelnames=['environment', 'role']
+)
+
+
+ntc_user_page_load_time = Gauge(
+    'ntc_user_page_load_time',
+    'Average page/workflow load time (ms).'
+)
+
+
+ntc_user_click_events = Counter(
+    'ntc_user_click_events',
+    'Count of key user interactions or clicks (increment-only).'
+)
+
+
+
+
+# ------------------------------------------------------------------------------
+# 4. Plugin & Integration Metrics
+# ------------------------------------------------------------------------------
+ntc_plugin_job_volume = Counter(
+    'ntc_plugin_job_volume',
+    'Count of jobs run by a given plugin.',
+    labelnames=['plugin_name']
+)
+
+
+ntc_plugin_job_success_rate = Gauge(
+    'ntc_plugin_job_success_rate',
+    'Success rate (0-1) for plugin jobs, labeled by plugin_name.',
+    labelnames=['plugin_name']
+)
+
+
+ntc_plugin_job_execution_time = Histogram(
+    'ntc_plugin_job_execution_time',
+    'Execution times (in seconds) for plugin jobs, labeled by plugin_name.',
+    labelnames=['plugin_name'],
+    buckets=[0.5, 1.0, 2.0, 5.0, 10.0, 30.0, 60.0, 120.0, float('inf')]
+)
+
+
+ntc_integration_golden_config_status = Gauge(
+    'ntc_integration_golden_config_status',
+    'Tracks the latest Golden Config job status (0=failure,1=success), labeled by device.',
+    labelnames=['device_name']
+)
+
+
+ntc_integration_ssot_sync_time = Histogram(
+    'ntc_integration_ssot_sync_time',
+    'Time taken (seconds) for SSoT syncs to complete.',
+    buckets=[1.0, 5.0, 10.0, 30.0, 60.0, 120.0, float('inf')]
+)
+
+
+ntc_integration_fsd_lvc_job_outcome = Gauge(
+    'ntc_integration_fsd_lvc_job_outcome',
+    'Tracks the outcome of FSD-LVC job runs (0=failure,1=success).'
+)
+
+
+ntc_integration_api_call_volume = Counter(
+    'ntc_integration_api_call_volume',
+    'Number of calls made to external or internal APIs.'
+)
+
+
+ntc_integration_webhook_event_rate = Counter(
+    'ntc_integration_webhook_event_rate',
+    'Number of webhook events processed.'
+)
+
+
+
+
+# ------------------------------------------------------------------------------
+# 5. Compliance & Configuration Metrics
+# ------------------------------------------------------------------------------
+ntc_compliance_ratio = Gauge(
+    'ntc_compliance_ratio',
+    'Overall compliance ratio across device/config checks.'
+)
+
+
+ntc_failed_compliance_checks = Gauge(
+    'ntc_failed_compliance_checks',
+    'Number of failed compliance checks.'
+)
+
+
+
+
+
