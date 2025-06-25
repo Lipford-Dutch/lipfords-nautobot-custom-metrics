@@ -22,7 +22,32 @@ logger = logging.getLogger(__name__)
 nautobot_version = version.parse(settings.VERSION)
 
 PLUGIN_SETTINGS = settings.PLUGINS_CONFIG["nautobot_capacity_metrics"]["app_metrics"]
+def collect_extras_metric(funcs):
+    """Collect Third party functions to generate additional Metrics.
 
+    Args:
+        funcs (list): list of functions to execute
+
+    Return:
+        List[GaugeMetricFamily]
+            nautobot_model_count: with model name and application name as labels
+    """
+    for func in funcs:
+        if not callable(func):
+            logger.warning("Extra metric is not a function, skipping ... ")
+            continue
+
+        results = func()
+
+        if not isinstance(results, Iterable):
+            logger.warning("Extra metric didn't return a list, skipping ... ")
+            continue
+
+        for metric in results:
+            if Metric not in type(metric).__bases__:
+                logger.warning("Extra metric didn't return a Metric object, skipping ... ")
+                continue
+            yield metric
 
 def metric_jobs(type_of_job):
     """Return Jobs results in Prometheus Metric format.
