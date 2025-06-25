@@ -10,7 +10,9 @@ import django
 from django.conf import settings
 from nautobot.extras.choices import JobResultStatusChoices
 from packaging import version
-from prometheus_client.core import GaugeMetricFamily, Metric
+from django.utils import timezone
+from django.db.models import Count, Avg, F
+from prometheus_client.core import GaugeMetricFamily, Metric, CounterMetricFamily
 
 logger = logging.getLogger(__name__)
 
@@ -162,302 +164,184 @@ def collect_extras_metric(funcs):
 
 
 
-#------------------------------------------------------------------------------
-# 2. DevOps Automation & Deployment Metrics
-#------------------------------------------------------------------------------
 
-
-# Deployment frequency (e.g., number of deployments per day/week)
-ntc_deployment_frequency = Gauge(
-    'ntc_devops_deployment_frequency',
-    'Number of deployments (e.g., per day) to production.'
-)
-
-
-# Change failure rate (percentage of changes/deployments that fail or require rollback)
-ntc_change_failure_rate = Gauge(
-    'ntc_devops_change_failure_rate',
-    'Percentage of changes or deployments that fail.'
-)
-
-
-# Mean time to recover (MTTR) for incidents
-ntc_mttr = Gauge(
-    'ntc_devops_mttr',
-    'Mean time to recover from incidents in minutes.'
-)
-
-
-# Automation efficiency (percentage of tasks automated vs. manual)
-ntc_automation_efficiency = Gauge(
-    'ntc_devops_automation_efficiency',
-    'Percentage of processes or tasks automated vs. manual.'
-)
-
-
-#------------------------------------------------------------------------------
-# 3. User Engagement & Application Metrics
-#------------------------------------------------------------------------------
-
-
-# Active user sessions in the application (could be labeled by environment, role, etc.)
-ntc_user_session_count = Gauge(
-    'ntc_user_session_count',
-    'Number of concurrent or active user sessions.',
-    labelnames=['environment', 'role']
-)
-
-
-# Page load or workflow duration times (aggregated or average)
-ntc_user_page_load_time = Gauge(
-    'ntc_user_page_load_time',
-    'Average page load or workflow duration time (ms).'
-)
-
-
-# Tracks user interactions or clicks for telemetry
-ntc_user_click_events = Counter(
-    'ntc_user_click_events',
-    'Count of key user interactions or click events (increment only).'
-)
-
-
-#------------------------------------------------------------------------------
-# 4. Plugin & Integration Metrics
-#------------------------------------------------------------------------------
-
-
-# Job volume for a given plugin (e.g., Golden Config, SSoT, etc.)
-ntc_plugin_job_volume = Counter(
-    'ntc_plugin_job_volume',
-    'Count of jobs run by a given plugin.',
-    labelnames=['plugin_name']
-)
-
-
-# Success rate or fraction for plugin jobs
-ntc_plugin_job_success_rate = Gauge(
-    'ntc_plugin_job_success_rate',
-    'Success rate (0-1) for plugin jobs.',
-    labelnames=['plugin_name']
-)
-
-
-# Execution time (seconds) for plugin jobs
-ntc_plugin_job_execution_time = Histogram(
-    'ntc_plugin_job_execution_time',
-    'Histogram of execution times (in seconds) for plugin jobs.',
-    labelnames=['plugin_name'],
-    buckets=[0.5, 1.0, 2.0, 5.0, 10.0, 30.0, 60.0, 120.0, float('inf')]
-)
-
-
-# Integration-specific metrics:
-#  A. Golden Config Status
-ntc_integration_golden_config_status = Gauge(
-    'ntc_integration_golden_config_status',
-    'Tracks the latest Golden Config job status (0=failure,1=success).',
-    labelnames=['device_name']
-)
-
-
-#  B. SSoT Sync Time
-ntc_integration_ssot_sync_time = Histogram(
-    'ntc_integration_ssot_sync_time',
-    'Time taken (in seconds) for SSoT syncs to complete.',
-    buckets=[1.0, 5.0, 10.0, 30.0, 60.0, 120.0, float('inf')]
-)
-
-
-#  C. FSD-LVC Job Outcome
-ntc_integration_fsd_lvc_job_outcome = Gauge(
-    'ntc_integration_fsd_lvc_job_outcome',
-    'Tracks the outcome of FSD-LVC job runs (0=failure,1=success).'
-)
-
-
-# Future integrations (APIs, WebHooks, etc.)
-ntc_integration_api_call_volume = Counter(
-    'ntc_integration_api_call_volume',
-    'Number of calls made to external or internal APIs.'
-)
-
-
-ntc_integration_webhook_event_rate = Counter(
-    'ntc_integration_webhook_event_rate',
-    'Number of webhook events processed.'
-)
-
-
-#------------------------------------------------------------------------------
-# 5. Compliance & Configuration Metrics
-#------------------------------------------------------------------------------
-
-
-# Compliance ratio (percentage or fraction)
-ntc_compliance_ratio = Gauge(
-    'ntc_compliance_ratio',
-    'Overall compliance ratio across device/config checks.'
-)
-
-
-# Failed compliance checks
-ntc_failed_compliance_checks = Gauge(
-    'ntc_failed_compliance_checks',
-    'Number of failed compliance checks.'
-)
-
-
-
-
-# ------------------------------------------------------------------------------
-# 1. ROI & Business Impact Metrics
-# ------------------------------------------------------------------------------
-ntc_roi_metric = Gauge(
-    'ntc_roi',
-    'Overall ROI for the NTC project (e.g., ratio or percentage).'
-)
-
-
-ntc_cost_savings = Gauge(
-    'ntc_cost_savings',
-    'Total cost savings in USD attributed to automation and improvements.'
-)
-
-
-ntc_time_saved_hours = Gauge(
-    'ntc_time_saved_hours',
-    'Total time saved (in hours) across automated tasks.'
-)
-
-
-
-
-# ------------------------------------------------------------------------------
-# 2. DevOps Automation & Deployment Metrics
-# ------------------------------------------------------------------------------
-ntc_deployment_frequency = Gauge(
-    'ntc_devops_deployment_frequency',
-    'Number of deployments (e.g., per day) to production.'
-)
-
-
-ntc_change_failure_rate = Gauge(
-    'ntc_devops_change_failure_rate',
-    'Percentage of changes or deployments that fail.'
-)
-
-
-ntc_mttr = Gauge(
-    'ntc_devops_mttr',
-    'Mean time (minutes) to recover from incidents.'
-)
-
-
-ntc_automation_efficiency = Gauge(
-    'ntc_devops_automation_efficiency',
-    'Percentage of processes or tasks automated vs. manual.'
-)
-
-
-
-
-# ------------------------------------------------------------------------------
-# 3. User Engagement & Application Metrics
-# ------------------------------------------------------------------------------
-ntc_user_session_count = Gauge(
-    'ntc_user_session_count',
-    'Number of concurrent/active user sessions, labeled by environment & role.',
-    labelnames=['environment', 'role']
-)
-
-
-ntc_user_page_load_time = Gauge(
-    'ntc_user_page_load_time',
-    'Average page/workflow load time (ms).'
-)
-
-
-ntc_user_click_events = Counter(
-    'ntc_user_click_events',
-    'Count of key user interactions or clicks (increment-only).'
-)
-
-
-
-
-# ------------------------------------------------------------------------------
-# 4. Plugin & Integration Metrics
-# ------------------------------------------------------------------------------
-ntc_plugin_job_volume = Counter(
-    'ntc_plugin_job_volume',
-    'Count of jobs run by a given plugin.',
-    labelnames=['plugin_name']
-)
-
-
-ntc_plugin_job_success_rate = Gauge(
-    'ntc_plugin_job_success_rate',
-    'Success rate (0-1) for plugin jobs, labeled by plugin_name.',
-    labelnames=['plugin_name']
-)
-
-
-ntc_plugin_job_execution_time = Histogram(
-    'ntc_plugin_job_execution_time',
-    'Execution times (in seconds) for plugin jobs, labeled by plugin_name.',
-    labelnames=['plugin_name'],
-    buckets=[0.5, 1.0, 2.0, 5.0, 10.0, 30.0, 60.0, 120.0, float('inf')]
-)
-
-
-ntc_integration_golden_config_status = Gauge(
-    'ntc_integration_golden_config_status',
-    'Tracks the latest Golden Config job status (0=failure,1=success), labeled by device.',
-    labelnames=['device_name']
-)
-
-
-ntc_integration_ssot_sync_time = Histogram(
-    'ntc_integration_ssot_sync_time',
-    'Time taken (seconds) for SSoT syncs to complete.',
-    buckets=[1.0, 5.0, 10.0, 30.0, 60.0, 120.0, float('inf')]
-)
-
-
-ntc_integration_fsd_lvc_job_outcome = Gauge(
-    'ntc_integration_fsd_lvc_job_outcome',
-    'Tracks the outcome of FSD-LVC job runs (0=failure,1=success).'
-)
-
-
-ntc_integration_api_call_volume = Counter(
-    'ntc_integration_api_call_volume',
-    'Number of calls made to external or internal APIs.'
-)
-
-
-ntc_integration_webhook_event_rate = Counter(
-    'ntc_integration_webhook_event_rate',
-    'Number of webhook events processed.'
-)
-
-
-
-
-# ------------------------------------------------------------------------------
-# 5. Compliance & Configuration Metrics
-# ------------------------------------------------------------------------------
-ntc_compliance_ratio = Gauge(
-    'ntc_compliance_ratio',
-    'Overall compliance ratio across device/config checks.'
-)
-
-
-ntc_failed_compliance_checks = Gauge(
-    'ntc_failed_compliance_checks',
-    'Number of failed compliance checks.'
-)
+def collect_daily_active_users():
+    """
+    Gauge: daily_active_users{date="YYYY-MM-DD"}
+    Logs unique daily user interactions (UI + API).
+    """
+    today = timezone.now().date()
+    dau = UserInteraction.objects.filter(timestamp__date=today) \
+        .values('user_id').distinct().count()
+    gauge = GaugeMetricFamily(
+        'nautobot_user_dau',
+        'Number of unique daily active users',
+        labels=['date'],
+    )
+    gauge.add_metric([today.isoformat()], dau)
+    yield gauge
+
+
+def collect_monthly_active_users():
+    """
+    Gauge: monthly_active_users{month="YYYY-MM"}
+    Logs unique monthly user interactions (UI + API).
+    """
+    now = timezone.now()
+    mau = UserInteraction.objects.filter(
+        timestamp__year=now.year,
+        timestamp__month=now.month
+    ).values('user_id').distinct().count()
+    gauge = GaugeMetricFamily(
+        'nautobot_user_mau',
+        'Number of unique monthly active users',
+        labels=['month'],
+    )
+    gauge.add_metric([f"{now.year}-{now.month:02d}"], mau)
+    yield gauge
+
+
+def collect_dau_mau_ratio():
+    """
+    Gauge: dau_mau_ratio{date="YYYY-MM-DD"}
+    Calculates DAU/MAU ratio daily.
+    """
+    # Assumes functions above provide the latest dau and mau
+    today = timezone.now().date().isoformat()
+    # Fetch last metrics or recompute inline
+    dau = UserInteraction.objects.filter(timestamp__date=timezone.now().date()).values('user_id').distinct().count()
+    now = timezone.now()
+    mau = UserInteraction.objects.filter(
+        timestamp__year=now.year,
+        timestamp__month=now.month
+    ).values('user_id').distinct().count()
+    ratio = dau / mau if mau else 0
+    gauge = GaugeMetricFamily(
+        'nautobot_user_dau_mau_ratio',
+        'Daily DAU/MAU ratio',
+        labels=['date'],
+    )
+    gauge.add_metric([today], ratio)
+    yield gauge
+
+
+def collect_session_duration():
+    """
+    Gauge: session_duration_seconds_average{interval="weekly|monthly"}
+    Tracks average session duration weekly and monthly.
+    """
+    now = timezone.now()
+    # average weekly
+    week_ago = now - timezone.timedelta(days=7)
+    avg_week = SessionRecord.objects.filter(start__gte=week_ago) \
+        .annotate(duration=F('end') - F('start')) \
+        .aggregate(avg=Avg('duration'))['avg'].total_seconds()
+    # average monthly
+    month_start = now.replace(day=1)
+    avg_month = SessionRecord.objects.filter(start__gte=month_start) \
+        .annotate(duration=F('end') - F('start')) \
+        .aggregate(avg=Avg('duration'))['avg'].total_seconds()
+    gauge = GaugeMetricFamily(
+        'nautobot_session_avg_duration_seconds',
+        'Average session duration in seconds',
+        labels=['period'],
+    )
+    gauge.add_metric(['weekly'], avg_week)
+    gauge.add_metric(['monthly'], avg_month)
+    yield gauge
+
+
+def collect_session_frequency():
+    """
+    Counter: sessions_per_user_total{user_role="..."}
+    Counts sessions per user, segmented by role.
+    """
+    qs = SessionRecord.objects.values('user__role') \
+        .annotate(count=Count('id'))
+    gauge = GaugeMetricFamily(
+        'nautobot_sessions_per_user',
+        'Number of sessions per user by role',
+        labels=['user_role'],
+    )
+    for entry in qs:
+        gauge.add_metric([entry['user__role']], entry['count'])
+    yield gauge
+
+
+def collect_top_features_used():
+    """
+    Gauge: feature_usage_count{feature="..."}
+    Ranked list of most-used features, filterable by user/team/time.
+    """
+    qs = FeatureUsage.objects.values('feature_name') \
+        .annotate(count=Count('id')) \
+        .order_by('-count')[:10]
+    gauge = GaugeMetricFamily(
+        'nautobot_feature_usage_top',
+        'Top features used sorted by usage count',
+        labels=['feature'],
+    )
+    for entry in qs:
+        gauge.add_metric([entry['feature_name']], entry['count'])
+    yield gauge
+
+
+def collect_feature_adoption_rate():
+    """
+    Gauge: feature_adoption_rate{feature="..."}
+    % of users using a new feature within window after release.
+    """
+    now = timezone.now()
+    # assume FeatureRelease model with release_date
+    for feature in FeatureRelease.objects.all():
+        window_end = feature.release_date + timezone.timedelta(days=30)
+        adopters = FeatureUsage.objects.filter(
+            feature_name=feature.name,
+            timestamp__range=(feature.release_date, window_end)
+        ).values('user_id').distinct().count()
+        total = User.objects.count()
+        rate = adopters / total if total else 0
+        gauge = GaugeMetricFamily(
+            'nautobot_feature_adoption_rate',
+            'Adoption rate of feature within 30 days',
+            labels=['feature'],
+        )
+        gauge.add_metric([feature.name], rate)
+        yield gauge
+
+
+def collect_user_logins():
+    """
+    Counter: user_logins_total{user="..."}
+    Logs each login with timestamp.
+    """
+    qs = UserLogin.objects.values('user_id') \
+        .annotate(total=Count('id'))
+    gauge = GaugeMetricFamily(
+        'nautobot_user_logins_total',
+        'Total number of logins per user',
+        labels=['user_id'],
+    )
+    for entry in qs:
+        gauge.add_metric([str(entry['user_id'])], entry['total'])
+    yield gauge
+
+
+def collect_api_calls():
+    """
+    Gauge: api_requests_total{endpoint="..."}
+    Counter of API calls per endpoint.
+    """
+    qs = APIRequest.objects.values('endpoint') \
+        .annotate(total=Count('id'))
+    gauge = GaugeMetricFamily(
+        'nautobot_api_requests_total',
+        'Total API calls per endpoint',
+        labels=['endpoint'],
+    )
+    for entry in qs:
+        gauge.add_metric([entry['endpoint']], entry['total'])
+    yield gauge
 
 
 
