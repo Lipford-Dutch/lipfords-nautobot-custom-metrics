@@ -15,7 +15,7 @@ from django.db.models import Count, Avg, F
 from prometheus_client.core import GaugeMetricFamily, Metric, CounterMetricFamily
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-from nautobot.extras.models import JobResult UserInteraction APIRequest SessionRecord FeatureUsage   # pylint: disable=import-outside-toplevel,no-name-in-module
+from nautobot.extras.models import JobResult UserInteraction APIRequest SessionRecord FeatureUsage FeatureRelease User   # pylint: disable=import-outside-toplevel,no-name-in-module
 logger = logging.getLogger(__name__)
 
 nautobot_version = version.parse(settings.VERSION)
