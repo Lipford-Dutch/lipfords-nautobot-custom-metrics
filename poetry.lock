@@ -159,7 +159,7 @@ files = [
 ]
 
 [package.dependencies]
-pytz = {version = ">=2015.7", markers = "python_version < \"3.9\""}
+pytz = {version = ">=2015.7", markers = "python_version < \"3.11\""}
 
 [package.extras]
 dev = ["freezegun (>=1.0,<2.0)", "pytest (>=6.0)", "pytest-cov"]
@@ -229,7 +229,7 @@ files = [
 ]
 
 [package.dependencies]
-"backports.zoneinfo" = {version = ">=0.2.1", markers = "python_version < \"3.9\""}
+"backports.zoneinfo" = {version = ">=0.2.1", markers = "python_version < \"3.11\""}
 billiard = ">=4.2.0,<5.0"
 click = ">=8.1.2,<9.0"
 click-didyoumean = ">=0.3.0"
@@ -752,7 +752,7 @@ files = [
 
 [package.dependencies]
 asgiref = ">=3.6.0,<4"
-"backports.zoneinfo" = {version = "*", markers = "python_version < \"3.9\""}
+"backports.zoneinfo" = {version = "*", markers = "python_version < \"3.11\""}
 sqlparse = ">=0.3.1"
 tzdata = {version = "*", markers = "sys_platform == \"win32\""}
 
@@ -2013,8 +2013,8 @@ django-redis = ">=5.4.0,<5.5.0"
 django-silk = ">=5.1.0,<5.2.0"
 django-structlog = {version = ">=8.1.0,<9.0.0", extras = ["celery"]}
 django-tables2 = [
-    {version = "2.7.0", markers = "python_version < \"3.9\""},
-    {version = ">=2.7.4,<2.8.0", markers = "python_version >= \"3.9\""},
+    {version = "2.7.0", markers = "python_version < \"3.11\""},
+    {version = ">=2.7.4,<2.8.0", markers = "python_version >= \"3.11\""},
 ]
 django-taggit = ">=5.0.0,<5.1.0"
 django-timezone-field = ">=7.0,<7.1"
