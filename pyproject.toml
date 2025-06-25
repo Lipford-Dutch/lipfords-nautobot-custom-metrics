@@ -35,6 +35,7 @@ nautobot = "^2.0.0"
 [tool.poetry.group.dev.dependencies]
 coverage = "*"
 django-debug-toolbar = "*"
+django-prometheus = "*"
 invoke = "*"
 ipython = "*"
 pylint = "*"
