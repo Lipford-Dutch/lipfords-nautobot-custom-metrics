@@ -13,6 +13,8 @@ from packaging import version
 from django.utils import timezone
 from django.db.models import Count, Avg, F
 from prometheus_client.core import GaugeMetricFamily, Metric, CounterMetricFamily
+from django.db import models
+from django.contrib.auth.models import AbstractUser
 
 logger = logging.getLogger(__name__)
 
@@ -135,215 +137,241 @@ def metric_versions():
     yield gauge
 
 
-def collect_extras_metric(funcs):
-    """Collect Third party functions to generate additional Metrics.
+# Reference: NAC-1725, Sprint 37
 
-    Args:
-        funcs (list): list of functions to execute
-
-    Return:
-        List[GaugeMetricFamily]
-            nautobot_model_count: with model name and application name as labels
-    """
-    for func in funcs:
-        if not callable(func):
-            logger.warning("Extra metric is not a function, skipping ... ")
-            continue
-
-        results = func()
-
-        if not isinstance(results, Iterable):
-            logger.warning("Extra metric didn't return a list, skipping ... ")
-            continue
-
-        for metric in results:
-            if Metric not in type(metric).__bases__:
-                logger.warning("Extra metric didn't return a Metric object, skipping ... ")
-                continue
-            yield metric
-
-
-
+# 1. Active Users
 
 def collect_daily_active_users():
     """
-    Gauge: daily_active_users{date="YYYY-MM-DD"}
-    Logs unique daily user interactions (UI + API).
+    Gauge: nautobot_user_dau{date,team,device_vendor,device_type}
+    Unique users interacting (UI + API) in last 7-day window by team and device.
     """
     today = timezone.now().date()
-    dau = UserInteraction.objects.filter(timestamp__date=today) \
-        .values('user_id').distinct().count()
+    week_ago = today - timezone.timedelta(days=7)
+    qs = (
+        UserInteraction.objects.filter(
+            timestamp__date__gte=week_ago,
+            event_type__in=['ui','api']
+        )
+        .values('timestamp__date', 'user__team', 'device_vendor', 'device_type')
+        .annotate(count=Count('user', distinct=True))
+    )
     gauge = GaugeMetricFamily(
         'nautobot_user_dau',
-        'Number of unique daily active users',
-        labels=['date'],
+        'Unique daily active users over 7-day window',
+        labels=['date','team','device_vendor','device_type'],
     )
-    gauge.add_metric([today.isoformat()], dau)
+    for e in qs:
+        gauge.add_metric([
+            e['timestamp__date'].isoformat(),
+            e['user__team'],
+            e.get('device_vendor') or 'unknown',
+            e.get('device_type') or 'unknown'
+        ], e['count'])
     yield gauge
 
 
 def collect_monthly_active_users():
     """
-    Gauge: monthly_active_users{month="YYYY-MM"}
-    Logs unique monthly user interactions (UI + API).
+    Gauge: nautobot_user_mau{month,team,device_vendor,device_type}
+    Unique monthly active users (UI + API) with MoM comparisons.
     """
     now = timezone.now()
-    mau = UserInteraction.objects.filter(
-        timestamp__year=now.year,
-        timestamp__month=now.month
-    ).values('user_id').distinct().count()
+    month_start = now.replace(day=1).date()
+    qs = (
+        UserInteraction.objects.filter(
+            timestamp__date__gte=month_start,
+            event_type__in=['ui','api']
+        )
+        .values('user__team', 'device_vendor', 'device_type')
+        .annotate(count=Count('user', distinct=True))
+    )
     gauge = GaugeMetricFamily(
         'nautobot_user_mau',
-        'Number of unique monthly active users',
-        labels=['month'],
+        'Unique monthly active users',
+        labels=['month','team','device_vendor','device_type'],
     )
-    gauge.add_metric([f"{now.year}-{now.month:02d}"], mau)
+    for e in qs:
+        gauge.add_metric([
+            f"{now.year}-{now.month:02d}",
+            e['user__team'],
+            e.get('device_vendor') or 'unknown',
+            e.get('device_type') or 'unknown'
+        ], e['count'])
     yield gauge
 
 
 def collect_dau_mau_ratio():
     """
-    Gauge: dau_mau_ratio{date="YYYY-MM-DD"}
-    Calculates DAU/MAU ratio daily.
+    Gauge: nautobot_user_dau_mau_ratio{date,team}
+    Daily DAU/MAU ratio, segmented by team, updated daily.
     """
-    # Assumes functions above provide the latest dau and mau
     today = timezone.now().date().isoformat()
-    # Fetch last metrics or recompute inline
-    dau = UserInteraction.objects.filter(timestamp__date=timezone.now().date()).values('user_id').distinct().count()
-    now = timezone.now()
-    mau = UserInteraction.objects.filter(
-        timestamp__year=now.year,
-        timestamp__month=now.month
-    ).values('user_id').distinct().count()
-    ratio = dau / mau if mau else 0
+    teams = User.objects.values_list('team', flat=True).distinct()
     gauge = GaugeMetricFamily(
         'nautobot_user_dau_mau_ratio',
         'Daily DAU/MAU ratio',
-        labels=['date'],
+        labels=['date','team'],
     )
-    gauge.add_metric([today], ratio)
+    for team in teams:
+        dau = UserInteraction.objects.filter(
+            timestamp__date=timezone.now().date(),
+            event_type__in=['ui','api'],
+            user__team=team
+        ).values('user').distinct().count()
+        now = timezone.now()
+        mau = UserInteraction.objects.filter(
+            timestamp__year=now.year,
+            timestamp__month=now.month,
+            event_type__in=['ui','api'],
+            user__team=team
+        ).values('user').distinct().count()
+        ratio = dau/mau if mau else 0
+        gauge.add_metric([today,team],ratio)
     yield gauge
 
+# 2. Session Metrics
 
 def collect_session_duration():
     """
-    Gauge: session_duration_seconds_average{interval="weekly|monthly"}
-    Tracks average session duration weekly and monthly.
+    Gauge: nautobot_session_avg_duration_seconds{interval,team}
+    Average session duration in seconds over 7-day and 30-day windows, segmented by team.
     """
     now = timezone.now()
-    # average weekly
-    week_ago = now - timezone.timedelta(days=7)
-    avg_week = SessionRecord.objects.filter(start__gte=week_ago) \
-        .annotate(duration=F('end') - F('start')) \
-        .aggregate(avg=Avg('duration'))['avg'].total_seconds()
-    # average monthly
-    month_start = now.replace(day=1)
-    avg_month = SessionRecord.objects.filter(start__gte=month_start) \
-        .annotate(duration=F('end') - F('start')) \
-        .aggregate(avg=Avg('duration'))['avg'].total_seconds()
+    windows = {
+        '7d': now - timezone.timedelta(days=7),
+        '30d': now - timezone.timedelta(days=30),
+    }
     gauge = GaugeMetricFamily(
         'nautobot_session_avg_duration_seconds',
         'Average session duration in seconds',
-        labels=['period'],
+        labels=['interval','team'],
     )
-    gauge.add_metric(['weekly'], avg_week)
-    gauge.add_metric(['monthly'], avg_month)
+    for label, since in windows.items():
+        qs = (
+            SessionRecord.objects.filter(start__gte=since)
+            .annotate(duration=F('end') - F('start'))
+            .values('user__team')
+            .annotate(avg=Avg('duration'))
+        )
+        for e in qs:
+            secs = e['avg'].total_seconds() if e['avg'] else 0
+            gauge.add_metric([label, e['user__team']], secs)
     yield gauge
 
 
 def collect_session_frequency():
     """
-    Counter: sessions_per_user_total{user_role="..."}
-    Counts sessions per user, segmented by role.
+    Gauge: nautobot_sessions_per_user{user,team}
+    Number of sessions per user (all time). Admins filter via Prometheus query range.
     """
-    qs = SessionRecord.objects.values('user__role') \
+    qs = (
+        SessionRecord.objects.values('user_id','user__team')
         .annotate(count=Count('id'))
+    )
     gauge = GaugeMetricFamily(
         'nautobot_sessions_per_user',
-        'Number of sessions per user by role',
-        labels=['user_role'],
+        'Total sessions per user by team',
+        labels=['user','team'],
     )
-    for entry in qs:
-        gauge.add_metric([entry['user__role']], entry['count'])
+    for e in qs:
+        gauge.add_metric([str(e['user_id']), e['user__team']], e['count'])
     yield gauge
 
+# 3. Feature Usage
 
 def collect_top_features_used():
     """
-    Gauge: feature_usage_count{feature="..."}
-    Ranked list of most-used features, filterable by user/team/time.
+    Gauge: nautobot_feature_usage_top{feature,interval,team,user,module}
+    Top 10 features by usage count in 7-day and 30-day windows, segmented.
     """
-    qs = FeatureUsage.objects.values('feature_name') \
-        .annotate(count=Count('id')) \
-        .order_by('-count')[:10]
+    now = timezone.now()
+    windows = {'7d': now - timezone.timedelta(days=7), '30d': now - timezone.timedelta(days=30)}
     gauge = GaugeMetricFamily(
         'nautobot_feature_usage_top',
-        'Top features used sorted by usage count',
-        labels=['feature'],
+        'Top features by usage count',
+        labels=['feature','interval','team','user','module'],
     )
-    for entry in qs:
-        gauge.add_metric([entry['feature_name']], entry['count'])
+    for label, since in windows.items():
+        qs = (
+            FeatureUsage.objects.filter(timestamp__gte=since)
+            .values('feature_name','user__team','user_id','module')
+            .annotate(count=Count('id'))
+            .order_by('-count')[:10]
+        )
+        for e in qs:
+            gauge.add_metric([
+                e['feature_name'], label, e['user__team'], str(e['user_id']), e['module']
+            ], e['count'])
     yield gauge
 
 
 def collect_feature_adoption_rate():
     """
-    Gauge: feature_adoption_rate{feature="..."}
-    % of users using a new feature within window after release.
+    Gauge: nautobot_feature_adoption_rate{feature,team}
+    % of users adopting each new feature within 30 days, segmented by team.
     """
-    now = timezone.now()
-    # assume FeatureRelease model with release_date
+    total = User.objects.count()
+    gauge = GaugeMetricFamily(
+        'nautobot_feature_adoption_rate',
+        'Feature adoption rate within 30 days',
+        labels=['feature','team'],
+    )
     for feature in FeatureRelease.objects.all():
         window_end = feature.release_date + timezone.timedelta(days=30)
-        adopters = FeatureUsage.objects.filter(
-            feature_name=feature.name,
-            timestamp__range=(feature.release_date, window_end)
-        ).values('user_id').distinct().count()
-        total = User.objects.count()
-        rate = adopters / total if total else 0
-        gauge = GaugeMetricFamily(
-            'nautobot_feature_adoption_rate',
-            'Adoption rate of feature within 30 days',
-            labels=['feature'],
+        qs = (
+            FeatureUsage.objects.filter(
+                feature_name=feature.name,
+                timestamp__range=(feature.release_date, window_end)
+            )
+            .values('user__team')
+            .annotate(adopters=Count('user', distinct=True))
         )
-        gauge.add_metric([feature.name], rate)
-        yield gauge
+        for e in qs:
+            rate = e['adopters']/total if total else 0
+            gauge.add_metric([feature.name, e['user__team']], rate)
+    yield gauge
 
+# 4. User Actions
 
 def collect_user_logins():
     """
-    Counter: user_logins_total{user="..."}
-    Logs each login with timestamp.
+    Gauge: nautobot_user_logins_total{user,team}
+    Total login count per user, segmented by team; windows via PromQL.
     """
-    qs = UserLogin.objects.values('user_id') \
+    qs = (
+        UserInteraction.objects.filter(event_type='login')
+        .values('user_id','user__team')
         .annotate(total=Count('id'))
+    )
     gauge = GaugeMetricFamily(
         'nautobot_user_logins_total',
-        'Total number of logins per user',
-        labels=['user_id'],
+        'Total user login count',
+        labels=['user','team'],
     )
-    for entry in qs:
-        gauge.add_metric([str(entry['user_id'])], entry['total'])
+    for e in qs:
+        gauge.add_metric([str(e['user_id']), e['user__team']], e['total'])
     yield gauge
 
 
 def collect_api_calls():
     """
-    Gauge: api_requests_total{endpoint="..."}
-    Counter of API calls per endpoint.
+    Gauge: nautobot_api_requests_total{endpoint,interval,team}
+    API call counts per endpoint in 7-day and 30-day windows, segmented by team.
     """
-    qs = APIRequest.objects.values('endpoint') \
-        .annotate(total=Count('id'))
+    now = timezone.now()
+    windows = {'7d': now - timezone.timedelta(days=7), '30d': now - timezone.timedelta(days=30)}
     gauge = GaugeMetricFamily(
         'nautobot_api_requests_total',
-        'Total API calls per endpoint',
-        labels=['endpoint'],
+        'API calls per endpoint',
+        labels=['endpoint','interval','team'],
     )
-    for entry in qs:
-        gauge.add_metric([entry['endpoint']], entry['total'])
+    for label, since in windows.items():
+        qs = (
+            APIRequest.objects.filter(timestamp__gte=since)
+            .values('endpoint','user__team')
+            .annotate(total=Count('id'))
+        )
+        for e in qs:
+            gauge.add_metric([e['endpoint'], label, e['user__team']], e['total'])
     yield gauge
-
-
-
-
-
