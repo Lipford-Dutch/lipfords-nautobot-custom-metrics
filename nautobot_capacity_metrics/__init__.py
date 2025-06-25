@@ -2,11 +2,15 @@
 
 # Metadata is inherited from Nautobot. If not including Nautobot in the environment, this should be added
 from importlib import metadata
+from importlib.metadata import PackageNotFoundError
 from typing import Callable
 
 from nautobot.apps import NautobotAppConfig
 
-__version__ = metadata.version(__name__)
+try:
+    __version__ = metadata.version(__name__)
+except PackageNotFoundError:  # pragma: no cover - fallback for tests
+    __version__ = "0.0.0"
 
 # Registry of functions that can generate additional application metrics
 # All functions in the registry should take no argument and return an Iterator (or list) of prometheus Metric Object

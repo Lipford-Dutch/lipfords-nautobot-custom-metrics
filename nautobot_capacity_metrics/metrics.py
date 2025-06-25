@@ -15,7 +15,15 @@ from django.db.models import Count, Avg, F
 from prometheus_client.core import GaugeMetricFamily, Metric, CounterMetricFamily
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-from nautobot.extras.models import JobResult, UserInteraction, APIRequest, SessionRecord, FeatureUsage, FeatureRelease, User   
+from nautobot.extras.models import JobResult
+from .models import (
+    APIRequest,
+    FeatureRelease,
+    FeatureUsage,
+    SessionRecord,
+    User,
+    UserInteraction,
+)
 
 logger = logging.getLogger(__name__)
 
