@@ -1,71 +1,120 @@
 # Reference: NAC-1725, Sprint 37
-# ------------------------- models.py -------------------------
+# ------------------------- models.py (Reviewed) -------------------------
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-# Nautobot imports
-from nautobot.apps.models import PrimaryModel, extras_features
-
-# If you want to choose a specific model to overload in your class declaration, please reference the following documentation:
-# how to chose a database model: https://docs.nautobot.com/projects/core/en/stable/plugins/development/#database-models
-# If you want to use the extras_features decorator please reference the following documentation
-# https://docs.nautobot.com/projects/core/en/stable/development/core/model-checklist/#extras-features
-@extras_features("custom_links", "custom_validators", "export_templates", "graphql", "webhooks")
-class {{ cookiecutter.model_class_name }}(PrimaryModel):  # pylint: disable=too-many-ancestors
-    """Base model for {{ cookiecutter.verbose_name }} app."""
-
-    name = models.CharField(max_length=100, unique=True)
-    description = models.CharField(max_length=200, blank=True)
-    # additional model fields
-
-    class Meta:
-        """Meta class."""
-
-        ordering = ["name"]
-
-        # Option for fixing capitalization (i.e. "Snmp" vs "SNMP")
-        # verbose_name = "{{ cookiecutter.verbose_name }}"
-
-        # Option for fixing plural name (i.e. "Chicken Tenders" vs "Chicken Tendies")
-        # verbose_name_plural = "{{ cookiecutter.verbose_name }}s"
-
-    def __str__(self):
-        """Stringify instance."""
-        return self.name
 
 class User(AbstractUser):
+    """
+    Extended user model with team, role, and organization.
+    """
     team = models.CharField(max_length=100)
     role = models.CharField(max_length=50)
-    # add additional fields as needed (e.g., organization)
+    organization = models.CharField(max_length=100, blank=True)
+
+    class Meta:
+        verbose_name = "User"
+        verbose_name_plural = "Users"
+        ordering = ["team", "username"]
+
+    def __str__(self):
+        return f"{self.username} ({self.team})"
 
 class UserInteraction(models.Model):
+    """
+    Logs each user event: UI click, API call, or login.
+    Includes device metadata and module context.
+    """
+    EVENT_UI = 'ui'
+    EVENT_API = 'api'
+    EVENT_LOGIN = 'login'
+
     EVENT_TYPES = [
-        ('ui', 'UI Interaction'),
-        ('api', 'API Call'),
-        ('login', 'User Login'),
+        (EVENT_UI, 'UI Interaction'),
+        (EVENT_API, 'API Call'),
+        (EVENT_LOGIN, 'User Login'),
     ]
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    timestamp = models.DateTimeField()
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='interactions')
+    timestamp = models.DateTimeField(auto_now_add=True)
     event_type = models.CharField(max_length=10, choices=EVENT_TYPES)
     device_vendor = models.CharField(max_length=50, null=True, blank=True)
     device_type = models.CharField(max_length=50, null=True, blank=True)
     module = models.CharField(max_length=100, null=True, blank=True)
 
+    class Meta:
+        indexes = [
+            models.Index(fields=['timestamp']),
+            models.Index(fields=['user', 'event_type']),
+        ]
+        ordering = ['-timestamp']
+        verbose_name = 'User Interaction'
+        verbose_name_plural = 'User Interactions'
+
+    def __str__(self):
+        return f"{self.user.username} {self.event_type} at {self.timestamp.isoformat()}"
+
 class SessionRecord(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    """
+    Tracks the start and end of a user session.
+    """
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sessions')
     start = models.DateTimeField()
     end = models.DateTimeField()
 
+    class Meta:
+        indexes = [models.Index(fields=['start', 'end']),]
+        verbose_name = 'Session Record'
+        verbose_name_plural = 'Session Records'
+
+    def __str__(self):
+        duration = self.end - self.start
+        return f"Session for {self.user.username}: {duration.total_seconds()}s"
+
 class FeatureRelease(models.Model):
-    name = models.CharField(max_length=100)
+    """
+    Records each feature release date for adoption tracking.
+    """
+    name = models.CharField(max_length=100, unique=True)
     release_date = models.DateTimeField()
 
+    class Meta:
+        ordering = ['-release_date']
+        verbose_name = 'Feature Release'
+        verbose_name_plural = 'Feature Releases'
+
+    def __str__(self):
+        return f"{self.name} released on {self.release_date.date()}"
+
 class FeatureUsage(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    """
+    Logs each feature invocation by a user.
+    Module field ties usage to app context.
+    """
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='feature_usages')
     feature_name = models.CharField(max_length=100)
-    timestamp = models.DateTimeField()
+    timestamp = models.DateTimeField(auto_now_add=True)
     module = models.CharField(max_length=100)
 
+    class Meta:
+        indexes = [models.Index(fields=['feature_name', 'timestamp']),]
+        verbose_name = 'Feature Usage'
+        verbose_name_plural = 'Feature Usages'
+
+    def __str__(self):
+        return f"{self.user.username} used {self.feature_name} at {self.timestamp.isoformat()}"
+
 class APIRequest(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    """
+    Logs each API request call for endpoint usage metrics.
+    """
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='api_requests')
     endpoint = models.CharField(max_length=200)
-    timestamp = models.DateTimeField()
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        indexes = [models.Index(fields=['endpoint', 'timestamp']),]
+        verbose_name = 'API Request'
+        verbose_name_plural = 'API Requests'
+
+    def __str__(self):
+        return f"{self.user.username} called {self.endpoint} at {self.timestamp.isoformat()}"
