@@ -15,7 +15,7 @@ from django.db.models import Count, Avg, F
 from prometheus_client.core import GaugeMetricFamily, Metric, CounterMetricFamily
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-
+from nautobot.extras.models import JobResult UserInteraction APIRequest SessionRecord FeatureUsage   # pylint: disable=import-outside-toplevel,no-name-in-module
 logger = logging.getLogger(__name__)
 
 nautobot_version = version.parse(settings.VERSION)
@@ -32,7 +32,7 @@ def metric_jobs(type_of_job):
         Iterator[GaugeMetricFamily]
             nautobot_job_execution_status: with jobs module the name and overall status of the job
     """
-    from nautobot.extras.models import JobResult UserInteraction APIRequest   # pylint: disable=import-outside-toplevel,no-name-in-module
+    
 
     git_repo_job_prefix = "nautobot.core.jobs.GitRepository"
 
