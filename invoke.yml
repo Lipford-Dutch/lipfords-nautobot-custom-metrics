@@ -1,8 +1,9 @@
 ---
 nautobot_capacity_metrics:
-  nautobot_ver: "2.0.0"
+  nautobot_ver: "2.0.1"
   python_ver: "3.11"
-  # local: false
+  tns_ver: "0.0.1"
+  local: true
   # compose_dir: "/full/path/to/nautobot-app-capacity-metrics/development"
 
 # The following is an example of using MySQL as the database backend
