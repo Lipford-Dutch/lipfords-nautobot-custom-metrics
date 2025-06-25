@@ -28,7 +28,7 @@ include = [
 ]
 
 [tool.poetry.dependencies]
-python = "*"
+python = "<3.13"
 # Used for local development
 nautobot = "^2.0.0"
 
