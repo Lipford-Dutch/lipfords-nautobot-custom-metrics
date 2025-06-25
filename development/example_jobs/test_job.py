@@ -2,6 +2,17 @@
 
 import time
 
+from django.conf import settings
+from django import setup as django_setup
+
+if not settings.configured:
+    settings.configure(
+        INSTALLED_APPS=["django.contrib.contenttypes", "django.contrib.auth"],
+        ALLOWED_URL_SCHEMES=["http", "https"],
+        ROOT_URLCONF="nautobot_capacity_metrics.urls",
+    )
+    django_setup()
+
 from nautobot.core.celery import register_jobs
 from nautobot.extras.jobs import BooleanVar, IntegerVar, Job
 
