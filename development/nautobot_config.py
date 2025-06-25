@@ -10,7 +10,7 @@ from nautobot.core.settings_funcs import is_truthy
 # Debug
 #
 
-DEBUG = is_truthy(os.getenv("NAUTOBOT_DEBUG", "false"))
+DEBUG = is_truthy(os.getenv("NAUTOBOT_DEBUG", "true"))
 _TESTING = len(sys.argv) > 1 and sys.argv[1] == "test"
 
 if DEBUG and not _TESTING:
