@@ -32,7 +32,7 @@ def metric_jobs(type_of_job):
         Iterator[GaugeMetricFamily]
             nautobot_job_execution_status: with jobs module the name and overall status of the job
     """
-    from nautobot.extras.models import JobResult  # pylint: disable=import-outside-toplevel,no-name-in-module
+    from nautobot.extras.models import JobResult UserInteraction APIRequest   # pylint: disable=import-outside-toplevel,no-name-in-module
 
     git_repo_job_prefix = "nautobot.core.jobs.GitRepository"
 
