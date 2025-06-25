@@ -376,3 +376,5 @@ def collect_api_calls():
         for e in qs:
             gauge.add_metric([e['endpoint'], label, e['user__team']], e['total'])
     yield gauge
+
+metrics = [collect_api_calls, collect_user_logins, collect_feature_adoption_rate, collect_top_features_used, collect_session_frequency, collect_session_duration, collect_daily_active_users, collect_dau_mau_ratio, collect_monthly_active_users, collect_daily_active_users, metric_models, metric_jobs,  metric_versions]
