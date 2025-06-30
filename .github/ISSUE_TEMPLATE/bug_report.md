@@ -1,12 +1,12 @@
 ---
 name: 🐛 Bug Report
-about: Report a reproducible bug in the current release of nautobot-capacity-metrics
+about: Report a reproducible bug in the current release of tns-custom-metrics
 ---
 
 ### Environment
 * Python version:  <!-- Example: 3.11.4 -->
 * Nautobot version:  <!-- Example: 2.0.0 -->
-* nautobot-capacity-metrics version:  <!-- Example: 1.0.0 -->
+* tns-custom-metrics version:  <!-- Example: 1.0.0 -->
 
 <!-- What did you expect to happen? -->
 ### Expected Behavior

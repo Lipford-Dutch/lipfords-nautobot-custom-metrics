@@ -1,12 +1,12 @@
 [tool.poetry]
-name = "nautobot-capacity-metrics"
+name = "tns-custom-metrics"
 version = "3.1.2"
 description = "App to improve the instrumentation of Nautobot and expose additional metrics"
 authors = ["Network to Code, LLC <opensource@networktocode.com>"]
 license = "Apache-2.0"
 readme = "README.md"
-homepage = "https://github.com/Lipford-Dutch/nautobot-app-capacity-metrics"
-repository = "https://github.com/Lipford-Dutch/nautobot-app-capacity-metrics"
+homepage = "https://github.com/Lipford-Dutch/tns-custom-metrics"
+repository = "https://github.com/Lipford-Dutch/tns-custom-metrics"
 documentation = "https://docs.nautobot.com/projects/capacity-metrics/en/latest/"
 keywords = ["nautobot", "nautobot-app", "nautobot-plugin"]
 classifiers = [
@@ -20,11 +20,11 @@ classifiers = [
     "Programming Language :: Python :: 3.12",
 ]
 packages = [
-    { include = "nautobot_capacity_metrics" },
+    { include = "tns_custom_metrics" },
 ]
 include = [
     # Poetry by default will exclude files that are in .gitignore
-    "nautobot_capacity_metrics/static/nautobot_capacity_metrics/docs/**/*",
+    "tns_custom_metrics/static/tns_custom_metrics/docs/**/*",
 ]
 
 [tool.poetry.dependencies]
@@ -123,14 +123,14 @@ ignore = [
 convention = "google"
 
 [tool.ruff.lint.per-file-ignores]
-"nautobot_capacity_metrics/migrations/*" = [
+"tns_custom_metrics/migrations/*" = [
     "D",
 ]
-"nautobot_capacity_metrics/tests/*" = [
+"tns_custom_metrics/tests/*" = [
     "D",
     "S"
 ]
-"nautobot_capacity_metrics/test_models/migrations/*" = [
+"tns_custom_metrics/test_models/migrations/*" = [
     "D",  # pydocstyle
 ]
 
@@ -139,12 +139,12 @@ requires = ["poetry_core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.towncrier]
-package = "nautobot_capacity_metrics"
+package = "tns_custom_metrics"
 directory = "changes"
 filename = "docs/admin/release_notes/version_X.Y.md"
 template = "development/towncrier_template.j2"
 start_string = "<!-- towncrier release notes start -->"
-issue_format = "[#{issue}](https://github.com/nautobot/nautobot-app-capacity-metrics/issues/{issue})"
+issue_format = "[#{issue}](https://github.com/nautobot/tns-custom-metrics/issues/{issue})"
 
 [[tool.towncrier.type]]
 directory = "security"

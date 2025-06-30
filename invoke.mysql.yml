@@ -1,6 +1,6 @@
 ---
-nautobot_capacity_metrics:
-  project_name: "nautobot-capacity-metrics"
+tns_custom_metrics:
+  project_name: "tns-custom-metrics"
   nautobot_ver: "2.0.0"
   local: false
   python_ver: "3.11"

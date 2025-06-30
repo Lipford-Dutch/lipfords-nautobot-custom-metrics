@@ -1,4 +1,4 @@
-"""Unit tests for nautobot_capacity_metrics."""
+"""Unit tests for tns_custom_metrics."""
 
 from django.contrib.auth import get_user_model
 from django.test import TestCase

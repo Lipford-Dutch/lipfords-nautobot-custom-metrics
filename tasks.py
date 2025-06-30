@@ -47,12 +47,12 @@ def is_truthy(arg):
 
 # Use pyinvoke configuration for default values, see http://docs.pyinvoke.org/en/stable/concepts/configuration.html
 # Variables may be overwritten in invoke.yml or by the environment variables INVOKE_NAUTOBOT_CAPACITY_METRICS_xxx
-namespace = Collection("nautobot_capacity_metrics")
+namespace = Collection("tns_custom_metrics")
 namespace.configure(
     {
-        "nautobot_capacity_metrics": {
+        "tns_custom_metrics": {
             "nautobot_ver": "2.3.1",
-            "project_name": "nautobot-capacity-metrics",
+            "project_name": "tns-custom-metrics",
             "python_ver": "3.11",
             "local": False,
             "compose_dir": os.path.join(os.path.dirname(__file__), "development"),
@@ -69,7 +69,7 @@ namespace.configure(
 
 
 def _is_compose_included(context, name):
-    return f"docker-compose.{name}.yml" in context.nautobot_capacity_metrics.compose_files
+    return f"docker-compose.{name}.yml" in context.tns_custom_metrics.compose_files
 
 
 def _await_healthy_service(context, service):
@@ -121,19 +121,19 @@ def docker_compose(context, command, **kwargs):
     build_env = {
         # Note: 'docker compose logs' will stop following after 60 seconds by default,
         # so we are overriding that by setting this environment variable.
-        "COMPOSE_HTTP_TIMEOUT": context.nautobot_capacity_metrics.compose_http_timeout,
-        "NAUTOBOT_VER": context.nautobot_capacity_metrics.nautobot_ver,
-        "PYTHON_VER": context.nautobot_capacity_metrics.python_ver,
+        "COMPOSE_HTTP_TIMEOUT": context.tns_custom_metrics.compose_http_timeout,
+        "NAUTOBOT_VER": context.tns_custom_metrics.nautobot_ver,
+        "PYTHON_VER": context.tns_custom_metrics.python_ver,
         **kwargs.pop("env", {}),
     }
     compose_command_tokens = [
         "docker compose",
-        f"--project-name {context.nautobot_capacity_metrics.project_name}",
-        f'--project-directory "{context.nautobot_capacity_metrics.compose_dir}"',
+        f"--project-name {context.tns_custom_metrics.project_name}",
+        f'--project-directory "{context.tns_custom_metrics.compose_dir}"',
     ]
 
-    for compose_file in context.nautobot_capacity_metrics.compose_files:
-        compose_file_path = os.path.join(context.nautobot_capacity_metrics.compose_dir, compose_file)
+    for compose_file in context.tns_custom_metrics.compose_files:
+        compose_file_path = os.path.join(context.tns_custom_metrics.compose_dir, compose_file)
         compose_command_tokens.append(f' -f "{compose_file_path}"')
 
     compose_command_tokens.append(command)
@@ -151,7 +151,7 @@ def docker_compose(context, command, **kwargs):
 
 def run_command(context, command, service="nautobot", **kwargs):
     """Wrapper to run a command locally or inside the nautobot container."""
-    if is_truthy(context.nautobot_capacity_metrics.local):
+    if is_truthy(context.tns_custom_metrics.local):
         if "command_env" in kwargs:
             kwargs["env"] = {
                 **kwargs.get("env", {}),
@@ -197,7 +197,7 @@ def build(context, force_rm=False, cache=True):
     if force_rm:
         command += " --force-rm"
 
-    print(f"Building Nautobot with Python {context.nautobot_capacity_metrics.python_ver}...")
+    print(f"Building Nautobot with Python {context.tns_custom_metrics.python_ver}...")
     docker_compose(context, command)
 
 
@@ -211,10 +211,10 @@ def generate_packages(context):
 def _get_docker_nautobot_version(context, nautobot_ver=None, python_ver=None):
     """Extract Nautobot version from base docker image."""
     if nautobot_ver is None:
-        nautobot_ver = context.nautobot_capacity_metrics.nautobot_ver
+        nautobot_ver = context.tns_custom_metrics.nautobot_ver
     if python_ver is None:
-        python_ver = context.nautobot_capacity_metrics.python_ver
-    dockerfile_path = os.path.join(context.nautobot_capacity_metrics.compose_dir, "Dockerfile")
+        python_ver = context.tns_custom_metrics.python_ver
+    dockerfile_path = os.path.join(context.tns_custom_metrics.compose_dir, "Dockerfile")
     base_image = context.run(f"grep --max-count=1 '^FROM ' {dockerfile_path}", hide=True).stdout.strip().split(" ")[1]
     base_image = base_image.replace(r"${NAUTOBOT_VER}", nautobot_ver).replace(r"${PYTHON_VER}", python_ver)
     pip_nautobot_ver = context.run(f"docker run --rm --entrypoint '' {base_image} pip show nautobot", hide=True)
@@ -249,16 +249,16 @@ def lock(context, check=False, constrain_nautobot_ver=False, constrain_python_ve
         docker_nautobot_version = _get_docker_nautobot_version(context)
         command = f"poetry add --lock nautobot@{docker_nautobot_version}"
         if constrain_python_ver:
-            command += f" --python {context.nautobot_capacity_metrics.python_ver}"
+            command += f" --python {context.tns_custom_metrics.python_ver}"
         try:
             output = run_command(context, command, hide=True)
             print(output.stdout, end="")
             print(output.stderr, file=sys.stderr, end="")
         except UnexpectedExit:
             print("Unable to add Nautobot dependency with version constraint, falling back to git branch.")
-            command = f"poetry add --lock git+https://github.com/nautobot/nautobot.git#{context.nautobot_capacity_metrics.nautobot_ver}"
+            command = f"poetry add --lock git+https://github.com/nautobot/nautobot.git#{context.tns_custom_metrics.nautobot_ver}"
             if constrain_python_ver:
-                command += f" --python {context.nautobot_capacity_metrics.python_ver}"
+                command += f" --python {context.tns_custom_metrics.python_ver}"
             run_command(context, command)
     else:
         command = f"poetry {'check' if check else 'lock --no-update'}"
@@ -440,7 +440,7 @@ def createsuperuser(context, user="admin"):
 )
 def makemigrations(context, name=""):
     """Perform makemigrations operation in Django."""
-    command = "nautobot-server makemigrations nautobot_capacity_metrics"
+    command = "nautobot-server makemigrations tns_custom_metrics"
 
     if name:
         command += f" --name {name}"
@@ -663,7 +663,7 @@ def docs(context):
     """Build and serve docs locally for development."""
     command = "mkdocs serve -v"
 
-    if is_truthy(context.nautobot_capacity_metrics.local):
+    if is_truthy(context.tns_custom_metrics.local):
         print(">>> Serving Documentation at http://localhost:8001")
         run_command(context, command)
     else:
@@ -723,17 +723,17 @@ def pylint(context):
     exit_code = 0
 
     base_pylint_command = 'pylint --verbose --init-hook "import nautobot; nautobot.setup()" --rcfile pyproject.toml'
-    command = f"{base_pylint_command} nautobot_capacity_metrics"
+    command = f"{base_pylint_command} tns_custom_metrics"
     if not run_command(context, command, warn=True):
         exit_code = 1
 
     # run the pylint_django migrations checkers on the migrations directory, if one exists
-    migrations_dir = Path(__file__).absolute().parent / Path("nautobot_capacity_metrics") / Path("migrations")
+    migrations_dir = Path(__file__).absolute().parent / Path("tns_custom_metrics") / Path("migrations")
     if migrations_dir.is_dir():
         migrations_pylint_command = (
             f"{base_pylint_command} --load-plugins=pylint_django.checkers.migrations"
             " --disable=all --enable=fatal,new-db-field-with-default,missing-backwards-migration-callable"
-            " nautobot_capacity_metrics.migrations"
+            " tns_custom_metrics.migrations"
         )
         if not run_command(context, migrations_pylint_command, warn=True):
             exit_code = 1
@@ -821,7 +821,7 @@ def check_migrations(context):
 def unittest(  # noqa: PLR0913
     context,
     keepdb=False,
-    label="nautobot_capacity_metrics",
+    label="tns_custom_metrics",
     failfast=False,
     buffer=True,
     pattern="",
@@ -847,7 +847,7 @@ def unittest(  # noqa: PLR0913
 @task
 def unittest_coverage(context):
     """Report on code test coverage as measured by 'invoke unittest'."""
-    command = "coverage report --skip-covered --include 'nautobot_capacity_metrics/*' --omit *migrations*"
+    command = "coverage report --skip-covered --include 'tns_custom_metrics/*' --omit *migrations*"
 
     run_command(context, command)
 
@@ -862,7 +862,7 @@ def unittest_coverage(context):
 def tests(context, failfast=False, keepdb=False, lint_only=False):
     """Run all tests for this app."""
     # If we are not running locally, start the docker containers so we don't have to for each test
-    if not is_truthy(context.nautobot_capacity_metrics.local):
+    if not is_truthy(context.tns_custom_metrics.local):
         print("Starting Docker Containers...")
         start(context)
     # Sorted loosely from fastest to slowest

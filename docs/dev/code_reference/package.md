@@ -1,1 +1,1 @@
-::: nautobot_capacity_metrics
+::: tns_custom_metrics

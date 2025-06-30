@@ -1,10 +1,10 @@
 ---
 dev_addr: "127.0.0.1:8001"
 edit_uri: "edit/main/docs"
-site_dir: "nautobot_capacity_metrics/static/nautobot_capacity_metrics/docs"
+site_dir: "tns_custom_metrics/static/tns_custom_metrics/docs"
 site_name: "TNS Metrics & Monitoring Extension App Documentation"
 site_url: "https://docs.nautobot.com/projects/capacity-metrics/en/latest/"
-repo_url: "https://github.com/Lipford-Dutch/nautobot-app-capacity-metrics"
+repo_url: "https://github.com/Lipford-Dutch/tns-custom-metrics"
 copyright: "Copyright &copy; Transaction Network Services"
 theme:
   name: "material"

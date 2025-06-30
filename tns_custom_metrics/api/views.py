@@ -8,8 +8,8 @@ from django.conf import settings
 from django.http import HttpResponse
 from prometheus_client.core import CollectorRegistry, GaugeMetricFamily
 
-from nautobot_capacity_metrics import __REGISTRY__
-from nautobot_capacity_metrics.metrics import (
+from tns_custom_metrics import __REGISTRY__
+from tns_custom_metrics.metrics import (
     collect_extras_metric,
     metric_jobs,
     metric_models,
@@ -26,7 +26,7 @@ from nautobot_capacity_metrics.metrics import (
 )
 
 logger = logging.getLogger(__name__)
-PLUGIN_SETTINGS = settings.PLUGINS_CONFIG["nautobot_capacity_metrics"]["app_metrics"]
+PLUGIN_SETTINGS = settings.PLUGINS_CONFIG["tns_custom_metrics"]["app_metrics"]
 
 
 class AppMetricsCollector:

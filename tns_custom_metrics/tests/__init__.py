@@ -1,4 +1,4 @@
-"""Unit tests for nautobot_capacity_metrics app."""
+"""Unit tests for tns_custom_metrics app."""
 
 from django.conf import settings
 
@@ -12,10 +12,10 @@ if not settings.configured:
             "rest_framework",
             "nautobot.users",
             "nautobot.extras",
-            "nautobot_capacity_metrics",
+            "tns_custom_metrics",
         ],
         DATABASES={"default": {"ENGINE": "django.db.backends.sqlite3", "NAME": ":memory:"}},
-        ROOT_URLCONF="nautobot_capacity_metrics.urls",
+        ROOT_URLCONF="tns_custom_metrics.urls",
         ALLOWED_URL_SCHEMES=["http", "https"],
         USE_TZ=True,
     )

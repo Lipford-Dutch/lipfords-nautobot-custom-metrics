@@ -1,4 +1,4 @@
-"""Test cases for nautobot_capacity_metrics views."""
+"""Test cases for tns_custom_metrics views."""
 
 from django.test import TestCase
 from django.urls import reverse
@@ -9,7 +9,7 @@ from rest_framework.test import APIClient
 class AppMetricEndpointTests(TestCase):
     """Test cases for ensuring application metric endpoint is working properly."""
 
-    app_metric_url = reverse("plugins-api:nautobot_capacity_metrics-api:nautobot_capacity_metrics_app_view")
+    app_metric_url = reverse("plugins-api:tns_custom_metrics-api:tns_custom_metrics_app_view")
 
     def test_endpoint(self):
         """Ensure the endpoint is working properly and is not protected by authentication."""
@@ -21,4 +21,4 @@ class AppMetricEndpointTests(TestCase):
         """Ensure that the model count metrics work correctly."""
         resp = self.client.get(self.app_metric_url)
         if "TestModel" not in resp.content.decode("utf-8"):
-            self.fail("nautobot_capacity_metrics.test_models.models.TestModel does not report its count.")
+            self.fail("tns_custom_metrics.test_models.models.TestModel does not report its count.")

@@ -8,7 +8,7 @@ Here you will find any steps necessary to cleanly remove the App from your Nauto
 Prior to removing the app from the `nautobot_config.py`, run the following command to roll back any migration specific to this app.
 
 ```shell
-nautobot-server migrate nautobot_capacity_metrics zero
+nautobot-server migrate tns_custom_metrics zero
 ```
 
 ## Remove App configuration
@@ -18,5 +18,5 @@ Remove the configuration you added in `nautobot_config.py` from `PLUGINS` & `PLU
 ## Uninstall the package
 
 ```bash
-$ pip3 uninstall nautobot-capacity-metrics
+$ pip3 uninstall tns-custom-metrics
 ```

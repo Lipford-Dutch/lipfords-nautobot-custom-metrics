@@ -1,4 +1,4 @@
-"""App declaration for nautobot_capacity_metrics."""
+"""App declaration for tns_custom_metrics."""
 
 # Metadata is inherited from Nautobot. If not including Nautobot in the environment, this should be added
 from importlib import metadata
@@ -32,10 +32,10 @@ def register_metric_func(func: Callable):
     __REGISTRY__.append(func)
 
 
-class NautobotCapacityMetricsConfig(NautobotAppConfig):
-    """App configuration for the nautobot_capacity_metrics app."""
+class TnsCustomMetricsConfig(NautobotAppConfig):
+    """App configuration for the tns_custom_metrics app."""
 
-    name = "nautobot_capacity_metrics"
+    name = "tns_custom_metrics"
     verbose_name = "Data, Metrics, and Monitoring Prometheus Endpoints"
     version = __version__
     author = "Network to Code, LLC"
@@ -63,7 +63,7 @@ class NautobotCapacityMetricsConfig(NautobotAppConfig):
         }
     }
     caching_config = {}
-    docs_view_name = "plugins:nautobot_capacity_metrics:docs"
+    docs_view_name = "plugins:tns_custom_metrics:docs"
 
 
-config = NautobotCapacityMetricsConfig  # pylint:disable=invalid-name
+config = TnsCustomMetricsConfig  # pylint:disable=invalid-name
