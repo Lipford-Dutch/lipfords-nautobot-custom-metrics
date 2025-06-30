@@ -67,7 +67,7 @@ The new function can be imported in the `nautobot_config.py` file and registered
 # nautobot_config.py
 from nautobot.metrics import metric_prefix_utilization
 PLUGINS_CONFIG = {
-    "nautobot_capacity_metrics": {
+    "tns_custom_metrics": {
       "app_metrics": {
         "extras": [
           metric_prefix_utilization
@@ -84,7 +84,7 @@ Third party apps can register their own function(s) using the `ready()` function
 
 ```python
 # my_app/__init__.py
-from nautobot_capacity_metrics import register_metric_func
+from tns_custom_metrics import register_metric_func
 from nautobot.metrics import metric_circuit_bandwidth
 
 class MyAppConfig(NautobotAppConfig):
@@ -102,7 +102,7 @@ In the future it will be possible to add metrics by adding them in a predefined 
 
 ## App Configuration Parameters
 
-The behavior of the app_metrics feature can be controlled with the following list of settings (under `nautobot_capacity_metrics > app_metrics`):
+The behavior of the app_metrics feature can be controlled with the following list of settings (under `tns_custom_metrics > app_metrics`):
 - `gitrepositories` boolean (default **False**), publish stats about the gitrepositories (success, warning, info, failure)
 - `jobs` boolean (default **False**), publish stats about the jobs (success, warning, info, failure)
 - `queues` boolean (default **False**), publish stats about Worker (nbr of worker, nbr and type of job in the different queues)
@@ -111,7 +111,7 @@ The behavior of the app_metrics feature can be controlled with the following lis
 
     ```python
     PLUGINS_CONFIG = {
-      "nautobot_capacity_metrics": {
+      "tns_custom_metrics": {
         "app_metrics": {
           "models": {
              "dcim": {"Site": True, "Rack": True, "Device": True},
@@ -130,10 +130,10 @@ The behavior of the app_metrics feature can be controlled with the following lis
 
 ## Screenshots
 
-![Metrics](https://raw.githubusercontent.com/nautobot/nautobot-app-capacity-metrics/develop/docs/images/capacity-metrics-screenshot-01.png "Metrics")
+![Metrics](https://raw.githubusercontent.com/nautobot/tns-custom-metrics/develop/docs/images/capacity-metrics-screenshot-01.png "Metrics")
 
-![Device Per Status](https://raw.githubusercontent.com/nautobot/nautobot-app-capacity-metrics/develop/docs/images/capacity-metrics-screenshot-02.png "Device Per Status")
+![Device Per Status](https://raw.githubusercontent.com/nautobot/tns-custom-metrics/develop/docs/images/capacity-metrics-screenshot-02.png "Device Per Status")
 
-![Rack Capacity](https://raw.githubusercontent.com/nautobot/nautobot-app-capacity-metrics/develop/docs/images/capacity-metrics-screenshot-03.png "Rack Capacity")
+![Rack Capacity](https://raw.githubusercontent.com/nautobot/tns-custom-metrics/develop/docs/images/capacity-metrics-screenshot-03.png "Rack Capacity")
 
-![Prefix Capacity](https://raw.githubusercontent.com/nautobot/nautobot-app-capacity-metrics/develop/docs/images/capacity-metrics-screenshot-04.png "Prefix Capacity")
+![Prefix Capacity](https://raw.githubusercontent.com/nautobot/tns-custom-metrics/develop/docs/images/capacity-metrics-screenshot-04.png "Prefix Capacity")

@@ -14,7 +14,7 @@ This is a quick reference guide if you're already familiar with the development 
 The [Invoke](http://www.pyinvoke.org/) library is used to provide some helper commands based on the environment. There are a few configuration parameters which can be passed to Invoke to override the default configuration:
 
 - `nautobot_ver`: the version of Nautobot to use as a base for any built docker containers (default: 2.0.0)
-- `project_name`: the default docker compose project name (default: `nautobot-capacity-metrics`)
+- `project_name`: the default docker compose project name (default: `tns-custom-metrics`)
 - `python_ver`: the version of Python to use as a base for any built docker containers (default: 3.11)
 - `local`: a boolean flag indicating if invoke tasks should be run on the host or inside the docker containers (default: False, commands will be run in docker containers)
 - `compose_dir`: the full path to a directory containing the project compose files
@@ -56,7 +56,7 @@ To either stop or destroy the development environment use the following options.
 
 ```yaml
 ---
-nautobot_capacity_metrics:
+tns_custom_metrics:
   local: true
 ```
 
@@ -177,7 +177,7 @@ The first thing you need to do is build the necessary Docker image for Nautobot 
 #14 exporting layers
 #14 exporting layers 1.2s done
 #14 writing image sha256:2d524bc1665327faa0d34001b0a9d2ccf450612bf8feeb969312e96a2d3e3503 done
-#14 naming to docker.io/nautobot-capacity-metrics/nautobot:2.0.0-py3.11 done
+#14 naming to docker.io/tns-custom-metrics/nautobot:2.0.0-py3.11 done
 ```
 
 ### Invoke - Starting the Development Environment
@@ -188,18 +188,18 @@ Next, you need to start up your Docker containers.
 ➜ invoke start
 Starting Nautobot in detached mode...
 Running docker-compose command "up --detach"
-Creating network "nautobot_capacity_metrics_default" with the default driver
-Creating volume "nautobot_capacity_metrics_postgres_data" with default driver
-Creating nautobot_capacity_metrics_redis_1 ...
-Creating nautobot_capacity_metrics_docs_1  ...
-Creating nautobot_capacity_metrics_postgres_1 ...
-Creating nautobot_capacity_metrics_postgres_1 ... done
-Creating nautobot_capacity_metrics_redis_1    ... done
-Creating nautobot_capacity_metrics_nautobot_1 ...
-Creating nautobot_capacity_metrics_docs_1     ... done
-Creating nautobot_capacity_metrics_nautobot_1 ... done
-Creating nautobot_capacity_metrics_worker_1   ...
-Creating nautobot_capacity_metrics_worker_1   ... done
+Creating network "tns_custom_metrics_default" with the default driver
+Creating volume "tns_custom_metrics_postgres_data" with default driver
+Creating tns_custom_metrics_redis_1 ...
+Creating tns_custom_metrics_docs_1  ...
+Creating tns_custom_metrics_postgres_1 ...
+Creating tns_custom_metrics_postgres_1 ... done
+Creating tns_custom_metrics_redis_1    ... done
+Creating tns_custom_metrics_nautobot_1 ...
+Creating tns_custom_metrics_docs_1     ... done
+Creating tns_custom_metrics_nautobot_1 ... done
+Creating tns_custom_metrics_worker_1   ...
+Creating tns_custom_metrics_worker_1   ... done
 Docker Compose is now in the Docker CLI, try `docker compose up`
 ```
 
@@ -208,11 +208,11 @@ This will start all of the Docker containers used for hosting Nautobot. You shou
 ```bash
 ➜ docker ps
 ****CONTAINER ID   IMAGE                            COMMAND                  CREATED          STATUS          PORTS                                       NAMES
-ee90fbfabd77   nautobot-capacity-metrics/nautobot:2.0.0-py3.11  "nautobot-server rqw…"   16 seconds ago   Up 13 seconds                                               nautobot_capacity_metrics_worker_1
-b8adb781d013   nautobot-capacity-metrics/nautobot:2.0.0-py3.11  "/docker-entrypoint.…"   20 seconds ago   Up 15 seconds   0.0.0.0:8080->8080/tcp, :::8080->8080/tcp   nautobot_capacity_metrics_nautobot_1
-d64ebd60675d   nautobot-capacity-metrics/nautobot:2.0.0-py3.11  "mkdocs serve -v -a …"   25 seconds ago   Up 18 seconds   0.0.0.0:8001->8080/tcp, :::8001->8080/tcp   nautobot_capacity_metrics_docs_1
-e72d63129b36   postgres:13-alpine               "docker-entrypoint.s…"   25 seconds ago   Up 19 seconds   0.0.0.0:5432->5432/tcp, :::5432->5432/tcp   nautobot_capacity_metrics_postgres_1
-96c6ff66997c   redis:6-alpine                   "docker-entrypoint.s…"   25 seconds ago   Up 21 seconds   0.0.0.0:6379->6379/tcp, :::6379->6379/tcp   nautobot_capacity_metrics_redis_1
+ee90fbfabd77   tns-custom-metrics/nautobot:2.0.0-py3.11  "nautobot-server rqw…"   16 seconds ago   Up 13 seconds                                               tns_custom_metrics_worker_1
+b8adb781d013   tns-custom-metrics/nautobot:2.0.0-py3.11  "/docker-entrypoint.…"   20 seconds ago   Up 15 seconds   0.0.0.0:8080->8080/tcp, :::8080->8080/tcp   tns_custom_metrics_nautobot_1
+d64ebd60675d   tns-custom-metrics/nautobot:2.0.0-py3.11  "mkdocs serve -v -a …"   25 seconds ago   Up 18 seconds   0.0.0.0:8001->8080/tcp, :::8001->8080/tcp   tns_custom_metrics_docs_1
+e72d63129b36   postgres:13-alpine               "docker-entrypoint.s…"   25 seconds ago   Up 19 seconds   0.0.0.0:5432->5432/tcp, :::5432->5432/tcp   tns_custom_metrics_postgres_1
+96c6ff66997c   redis:6-alpine                   "docker-entrypoint.s…"   25 seconds ago   Up 21 seconds   0.0.0.0:6379->6379/tcp, :::6379->6379/tcp   tns_custom_metrics_redis_1
 ```
 
 Once the containers are fully up, you should be able to open up a web browser, and view:
@@ -256,27 +256,27 @@ The last command to know for now is `invoke stop`.
 ➜ invoke stop
 Stopping Nautobot...
 Running docker-compose command "down"
-Stopping nautobot_capacity_metrics_worker_1   ...
-Stopping nautobot_capacity_metrics_nautobot_1 ...
-Stopping nautobot_capacity_metrics_docs_1     ...
-Stopping nautobot_capacity_metrics_redis_1    ...
-Stopping nautobot_capacity_metrics_postgres_1 ...
-Stopping nautobot_capacity_metrics_worker_1   ... done
-Stopping nautobot_capacity_metrics_nautobot_1 ... done
-Stopping nautobot_capacity_metrics_postgres_1 ... done
-Stopping nautobot_capacity_metrics_redis_1    ... done
-Stopping nautobot_capacity_metrics_docs_1     ... done
-Removing nautobot_capacity_metrics_worker_1   ...
-Removing nautobot_capacity_metrics_nautobot_1 ...
-Removing nautobot_capacity_metrics_docs_1     ...
-Removing nautobot_capacity_metrics_redis_1    ...
-Removing nautobot_capacity_metrics_postgres_1 ...
-Removing nautobot_capacity_metrics_postgres_1 ... done
-Removing nautobot_capacity_metrics_docs_1     ... done
-Removing nautobot_capacity_metrics_worker_1   ... done
-Removing nautobot_capacity_metrics_redis_1    ... done
-Removing nautobot_capacity_metrics_nautobot_1 ... done
-Removing network nautobot_capacity_metrics_default
+Stopping tns_custom_metrics_worker_1   ...
+Stopping tns_custom_metrics_nautobot_1 ...
+Stopping tns_custom_metrics_docs_1     ...
+Stopping tns_custom_metrics_redis_1    ...
+Stopping tns_custom_metrics_postgres_1 ...
+Stopping tns_custom_metrics_worker_1   ... done
+Stopping tns_custom_metrics_nautobot_1 ... done
+Stopping tns_custom_metrics_postgres_1 ... done
+Stopping tns_custom_metrics_redis_1    ... done
+Stopping tns_custom_metrics_docs_1     ... done
+Removing tns_custom_metrics_worker_1   ...
+Removing tns_custom_metrics_nautobot_1 ...
+Removing tns_custom_metrics_docs_1     ...
+Removing tns_custom_metrics_redis_1    ...
+Removing tns_custom_metrics_postgres_1 ...
+Removing tns_custom_metrics_postgres_1 ... done
+Removing tns_custom_metrics_docs_1     ... done
+Removing tns_custom_metrics_worker_1   ... done
+Removing tns_custom_metrics_redis_1    ... done
+Removing tns_custom_metrics_nautobot_1 ... done
+Removing network tns_custom_metrics_default
 ```
 
 This will safely shut down all of your running Docker containers for this project. When you are ready to spin containers back up, it is as simple as running `invoke start` again [as seen previously](#invoke-starting-the-development-environment).
@@ -314,7 +314,7 @@ When trying to debug an issue, one helpful thing you can look at are the logs wi
 !!! info
     Want to limit the log output even further? Use the `--tail <#>` command line argument in conjunction with `-f`.
 
-So for example, our app is named `nautobot-capacity-metrics`, the command would most likely be `docker logs nautobot_capacity_metrics_nautobot_1 -f`. You can find the name of all running containers via `docker ps`.
+So for example, our app is named `tns-custom-metrics`, the command would most likely be `docker logs tns_custom_metrics_nautobot_1 -f`. You can find the name of all running containers via `docker ps`.
 
 If you want to view the logs specific to the worker container, simply use the name of that container instead.
 
@@ -384,10 +384,10 @@ Once the containers are up and running, you should now see the new app installed
 To update the Python version, you can update it within `tasks.py`.
 
 ```python
-namespace = Collection("nautobot_capacity_metrics")
+namespace = Collection("tns_custom_metrics")
 namespace.configure(
     {
-        "nautobot_capacity_metrics": {
+        "tns_custom_metrics": {
             ...
             "python_ver": "3.11",
 	    ...
@@ -403,10 +403,10 @@ Or set the `INVOKE_NAUTOBOT_CAPACITY_METRICS_PYTHON_VER` variable.
 To update the Nautobot version, you can update it within `tasks.py`.
 
 ```python
-namespace = Collection("nautobot_capacity_metrics")
+namespace = Collection("tns_custom_metrics")
 namespace.configure(
     {
-        "nautobot_capacity_metrics": {
+        "tns_custom_metrics": {
             ...
             "nautobot_ver": "2.0.0",
 	    ...
@@ -467,7 +467,7 @@ To run an individual test, you can run any or all of the following:
 
 ### App Configuration Schema
 
-In the package source, there is the `nautobot_capacity_metrics/app-config-schema.json` file, conforming to the [JSON Schema](https://json-schema.org/) format. This file is used to validate the configuration of the app in CI pipelines.
+In the package source, there is the `tns_custom_metrics/app-config-schema.json` file, conforming to the [JSON Schema](https://json-schema.org/) format. This file is used to validate the configuration of the app in CI pipelines.
 
 If you make changes to `PLUGINS_CONFIG` or the configuration schema, you can run the following command to validate the schema:
 

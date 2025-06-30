@@ -1,4 +1,4 @@
-"""Metrics libraries for the nautobot_capacity_metrics app."""
+"""Metrics libraries for the tns_custom_metrics app."""
 
 import importlib
 import logging
@@ -29,7 +29,7 @@ logger = logging.getLogger(__name__)
 
 nautobot_version = version.parse(settings.VERSION)
 
-PLUGIN_SETTINGS = settings.PLUGINS_CONFIG["nautobot_capacity_metrics"]["app_metrics"]
+PLUGIN_SETTINGS = settings.PLUGINS_CONFIG["tns_custom_metrics"]["app_metrics"]
 def collect_extras_metric(funcs):
     """Collect Third party functions to generate additional Metrics.
 

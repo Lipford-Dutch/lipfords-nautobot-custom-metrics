@@ -693,7 +693,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "plugins-api:nautobot_capacity_metrics-api:nautobot_capacity_metrics_app_view"
+              "options": "plugins-api:tns_custom_metrics-api:tns_custom_metrics_app_view"
             },
             "properties": [
               {
@@ -705,7 +705,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "plugins-api:nautobot_capacity_metrics-api:nautobot_capacity_metrics_rq_view"
+              "options": "plugins-api:tns_custom_metrics-api:tns_custom_metrics_rq_view"
             },
             "properties": [
               {
@@ -1892,7 +1892,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "topk(10,sum by (view) (increase(django_http_requests_latency_seconds_by_view_method_count{job=~\"$job\", namespace=~\"$namespace\", instance=~\"$instance\", view!~\"prometheus-django-metrics|plugins-api:nautobot_capacity_metrics-api:nautobot_capacity_metrics_rq_view|plugins-api:nautobot_capacity_metrics-api:nautobot_capacity_metrics_app_view\"}[$__range])))",
+          "expr": "topk(10,sum by (view) (increase(django_http_requests_latency_seconds_by_view_method_count{job=~\"$job\", namespace=~\"$namespace\", instance=~\"$instance\", view!~\"prometheus-django-metrics|plugins-api:tns_custom_metrics-api:tns_custom_metrics_rq_view|plugins-api:tns_custom_metrics-api:tns_custom_metrics_app_view\"}[$__range])))",
           "instant": true,
           "interval": "",
           "legendFormat": "{{view}}",
@@ -2094,7 +2094,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "plugins-api:nautobot_capacity_metrics-api:nautobot_capacity_metrics_app_view"
+              "options": "plugins-api:tns_custom_metrics-api:tns_custom_metrics_app_view"
             },
             "properties": [
               {
@@ -2106,7 +2106,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "plugins-api:nautobot_capacity_metrics-api:nautobot_capacity_metrics_rq_view"
+              "options": "plugins-api:tns_custom_metrics-api:tns_custom_metrics_rq_view"
             },
             "properties": [
               {

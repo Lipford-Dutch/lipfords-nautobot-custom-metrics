@@ -306,4 +306,4 @@ invoke.yml
 public
 /compose.yaml
 /dump.sql
-/nautobot_capacity_metrics/static/nautobot_capacity_metrics/docs
+/tns_custom_metrics/static/tns_custom_metrics/docs

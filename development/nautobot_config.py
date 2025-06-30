@@ -132,14 +132,14 @@ MIDDLEWARE = [
 
 # Enable installed Apps. Add the name of each App to the list.
 PLUGINS = [
-    "nautobot_capacity_metrics",
-    "nautobot_capacity_metrics.test_models",
+    "tns_custom_metrics",
+    "tns_custom_metrics.test_models",
 ]
 
 # Apps configuration settings. These settings are used by various Apps that the user may have installed.
 # Each key in the dictionary is the name of an installed App and its value is a dictionary of settings.
 PLUGINS_CONFIG = {
-    "nautobot_capacity_metrics": {
+    "tns_custom_metrics": {
         "app_metrics": {
             "gitrepositories": True,
             "jobs": True,
@@ -153,7 +153,7 @@ PLUGINS_CONFIG = {
                 },
                 "ipam": {"IPAddress": True, "Prefix": True},
                 "extras": {"GitRepository": True},
-                "test_models": {"_module": "nautobot_capacity_metrics", "TestModel": True},
+                "test_models": {"_module": "tns_custom_metrics", "TestModel": True},
             },
             "queues": True,
             "versions": {
@@ -164,8 +164,8 @@ PLUGINS_CONFIG = {
     },
 }
 
-# Per https://github.com/nautobot/nautobot-app-capacity-metrics/issues/23, disable these metrics as MySQL does not support
+# Per https://github.com/nautobot/tns-custom-metrics/issues/23, disable these metrics as MySQL does not support
 # args on DISTINCT.
 if DATABASES["default"]["ENGINE"] == "django.db.backends.mysql":
-    PLUGINS_CONFIG["nautobot_capacity_metrics"]["app_metrics"]["gitrepositories"] = False
-    PLUGINS_CONFIG["nautobot_capacity_metrics"]["app_metrics"]["jobs"] = False
+    PLUGINS_CONFIG["tns_custom_metrics"]["app_metrics"]["gitrepositories"] = False
+    PLUGINS_CONFIG["tns_custom_metrics"]["app_metrics"]["jobs"] = False

@@ -1,12 +1,12 @@
 # Metrics & Monitoring Extension App
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/nautobot/nautobot-app-capacity-metrics/develop/docs/images/icon-nautobot-capacity-metrics.svg" class="logo" height="200px">
+  <img src="https://raw.githubusercontent.com/nautobot/tns-custom-metrics/develop/docs/images/icon-tns-custom-metrics.svg" class="logo" height="200px">
   <br>
-  <a href="https://github.com/nautobot/nautobot-app-capacity-metrics/actions"><img src="https://github.com/nautobot/nautobot-app-capacity-metrics/actions/workflows/ci.yml/badge.svg?branch=main"></a>
+  <a href="https://github.com/nautobot/tns-custom-metrics/actions"><img src="https://github.com/nautobot/tns-custom-metrics/actions/workflows/ci.yml/badge.svg?branch=main"></a>
   <a href="https://docs.nautobot.com/projects/capacity-metrics/en/latest/"><img src="https://readthedocs.org/projects/nautobot-plugin-capacity-metrics/badge/"></a>
-  <a href="https://pypi.org/project/nautobot-capacity-metrics/"><img src="https://img.shields.io/pypi/v/nautobot-capacity-metrics"></a>
-  <a href="https://pypi.org/project/nautobot-capacity-metrics/"><img src="https://img.shields.io/pypi/dm/nautobot-capacity-metrics"></a>
+  <a href="https://pypi.org/project/tns-custom-metrics/"><img src="https://img.shields.io/pypi/v/tns-custom-metrics"></a>
+  <a href="https://pypi.org/project/tns-custom-metrics/"><img src="https://img.shields.io/pypi/dm/tns-custom-metrics"></a>
   <br>
   An <a href="https://networktocode.com/nautobot-apps/">App</a> for <a href="https://nautobot.com/">Nautobot</a>.
 </p>
@@ -43,7 +43,7 @@ Full documentation for this App can be found over on the [Nautobot Docs](https:/
 
 ### Contributing to the Documentation
 
-You can find all the Markdown source for the App documentation under the [`docs`](https://github.com/nautobot/nautobot-app-capacity-metrics/tree/develop/docs) folder in this repository. For simple edits, a Markdown capable editor is sufficient: clone the repository and edit away.
+You can find all the Markdown source for the App documentation under the [`docs`](https://github.com/nautobot/tns-custom-metrics/tree/develop/docs) folder in this repository. For simple edits, a Markdown capable editor is sufficient: clone the repository and edit away.
 
 If you need to view the fully-generated documentation site, you can build it with [MkDocs](https://www.mkdocs.org/). A container hosting the documentation can be started using the `invoke` commands (details in the [Development Environment Guide](https://docs.nautobot.com/projects/capacity-metrics/en/latest/dev/dev_environment/#docker-development-environment)) on [http://localhost:8001](http://localhost:8001). Using this container, as your changes to the documentation are saved, they will be automatically rebuilt and any pages currently being viewed will be reloaded in your browser.
 

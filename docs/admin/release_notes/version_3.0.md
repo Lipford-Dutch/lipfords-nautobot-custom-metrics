@@ -12,7 +12,7 @@ This document describes all new features and changes in the release `3.0`. The f
 
 ### Fixed
 
-- [#65](https://github.com/nautobot/nautobot-app-capacity-metrics/issues/65) Fixes incorrect self-reporting of version number
+- [#65](https://github.com/nautobot/tns-custom-metrics/issues/65) Fixes incorrect self-reporting of version number
 
 ## [v3.0.0] - 2023-09-29
 

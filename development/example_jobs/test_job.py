@@ -9,7 +9,7 @@ if not settings.configured:
     settings.configure(
         INSTALLED_APPS=["django.contrib.contenttypes", "django.contrib.auth"],
         ALLOWED_URL_SCHEMES=["http", "https"],
-        ROOT_URLCONF="nautobot_capacity_metrics.urls",
+        ROOT_URLCONF="tns_custom_metrics.urls",
     )
     django_setup()
 
