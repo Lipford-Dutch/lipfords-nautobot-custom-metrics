@@ -8,14 +8,13 @@ from copy import deepcopy
 
 import django
 from django.conf import settings
-from nautobot.extras.choices import JobResultStatusChoices
-from packaging import version
+from django.db.models import Avg, Count, F
 from django.utils import timezone
-from django.db.models import Count, Avg, F
-from prometheus_client.core import GaugeMetricFamily, Metric, CounterMetricFamily
-from django.db import models
-from django.contrib.auth.models import AbstractUser
+from nautobot.extras.choices import JobResultStatusChoices
 from nautobot.extras.models import JobResult
+from packaging import version
+from prometheus_client.core import GaugeMetricFamily, Metric
+
 from .models import (
     APIRequest,
     FeatureRelease,
@@ -66,8 +65,6 @@ def metric_jobs(type_of_job):
         Iterator[GaugeMetricFamily]
             nautobot_job_execution_status: with jobs module the name and overall status of the job
     """
-    
-
     git_repo_job_prefix = "nautobot.core.jobs.GitRepository"
 
     # Get the latest result for each job
@@ -410,4 +407,17 @@ def collect_api_calls():
             gauge.add_metric([e['endpoint'], label, e['user__team']], e['total'])
     yield gauge
 
-metrics = [collect_api_calls, collect_user_logins, collect_feature_adoption_rate, collect_top_features_used, collect_session_frequency, collect_session_duration, collect_daily_active_users, collect_dau_mau_ratio, collect_monthly_active_users, collect_daily_active_users, metric_models, metric_jobs,  metric_versions]
+metrics = [
+    collect_api_calls,
+    collect_user_logins,
+    collect_feature_adoption_rate,
+    collect_top_features_used,
+    collect_session_frequency,
+    collect_session_duration,
+    collect_daily_active_users,
+    collect_dau_mau_ratio,
+    collect_monthly_active_users,
+    metric_models,
+    metric_jobs,
+    metric_versions,
+]
