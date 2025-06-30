@@ -14,15 +14,6 @@ from tns_custom_metrics.metrics import (
     metric_jobs,
     metric_models,
     metric_versions,
-    collect_daily_active_users, 
-    collect_monthly_active_users, 
-    collect_dau_mau_ratio, 
-    collect_session_duration, 
-    collect_session_frequency, 
-    collect_top_features_used, 
-    collect_feature_adoption_rate, 
-    collect_user_logins, 
-    collect_api_calls,
 )
 
 logger = logging.getLogger(__name__)
