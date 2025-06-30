@@ -3,17 +3,12 @@
 Here you will find detailed instructions on how to **install** and **configure** the App within your Nautobot environment.
 
 ## Prerequisites
-
-- The app is compatible with Nautobot 2.0.0 and higher.
-- Databases supported: PostgreSQL, MySQL
-
-!!! note
-    Please check the [dedicated page](compatibility_matrix.md) for a full compatibility matrix and the deprecation policy.
-
+OTEL Collector 
+FW Rules 
+Prometheus Server 
 ## Install Guide
 
-!!! note
-    Apps can be installed from the [Python Package Index](https://pypi.org/) or locally. See the [Nautobot documentation](https://docs.nautobot.com/projects/core/en/stable/user-guide/administration/installation/app-install/) for more details. The pip package name for this app is [`tns-custom-metrics`](https://pypi.org/project/tns-custom-metrics/).
+[`tns-custom-metrics`](https://tns-sharepoint/project/tns-custom-metrics/).
 
 The app is available as a Python package via PyPI and can be installed with `pip`:
 
@@ -89,11 +84,13 @@ The app behavior can be controlled with the following list of settings:
 
 | Key     | Example | Default | Description                          |
 | ------- | ------ | -------- | ------------------------------------- |
-| `app_metrics` | `{"models": {"dcim": "Device": True}}` | `{"models": {"dcim": {"Site": True, "Rack": True, "Device": True}, "ipam": {"IPAddress": True, "Prefix": True}}, "jobs": True, "queues": True, "versions": {"basic": False, "plugins": False}` | Specifies which metrics to publish for each app. |
+| `app_metrics` | 
+`{"models": {"dcim": "Device": True}}` |
+`{"models": {"dcim": {"Site": True, "Rack": True, "Device": True}, "ipam": {"IPAddress": True, "Prefix": True}}, "jobs": True, "queues": True, "versions": {"basic": False, "plugins": False}` | Specifies which metrics to publish for each app. |
 
 
-## Included Grafana Dashboard
+## Splunk Observability Dashboard
 
-Included within this app is a Grafana dashboard which will work with the example configuration above. To install this dashboard import the JSON from [Grafana Dashboard](https://raw.githubusercontent.com/nautobot/tns-custom-metrics/develop/docs/nautobot_grafana_dashboard.json) into Grafana.
+- User Engagement 
+- ROI Grouping 
 
-![Nautobot Grafana Dashboard](https://raw.githubusercontent.com/nautobot/tns-custom-metrics/develop/docs/images/nautobot_grafana_dashboard.png)
