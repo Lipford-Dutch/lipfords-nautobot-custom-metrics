@@ -51,7 +51,7 @@ def collect_extras_metric(funcs):
             continue
 
         for metric in results:
-            if Metric not in type(metric).__bases__:
+            if not isinstance(metric, Metric):
                 logger.warning("Extra metric didn't return a Metric object, skipping ... ")
                 continue
             yield metric
