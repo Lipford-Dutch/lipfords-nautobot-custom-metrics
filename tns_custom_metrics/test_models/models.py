@@ -12,14 +12,14 @@ class User(AbstractUser):
     organization = models.CharField(max_length=100, blank=True)
     groups = models.ManyToManyField(
         Group,
-        related_name="tns_custom_metrics_user_set",
+        related_name="tns_custom_metrics_test_user_groups",
         blank=True,
         help_text="The groups this user belongs to.",
         verbose_name="groups",
     )
     user_permissions = models.ManyToManyField(
         Permission,
-        related_name="tns_custom_metrics_user_permission_set",
+        related_name="tns_custom_metrics_test_user_permissions",
         blank=True,
         help_text="Specific permissions for this user.",
         verbose_name="user permissions",
