@@ -1,7 +1,7 @@
 # Reference: NAC-1725, Sprint 37
 # ------------------------- models.py (Reviewed) -------------------------
 from django.db import models
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractUser, Group, Permission
 
 class User(AbstractUser):
     """
@@ -10,6 +10,20 @@ class User(AbstractUser):
     team = models.CharField(max_length=100)
     role = models.CharField(max_length=50)
     organization = models.CharField(max_length=100, blank=True)
+    groups = models.ManyToManyField(
+        Group,
+        related_name="tns_custom_metrics_user_set",
+        blank=True,
+        help_text="The groups this user belongs to.",
+        verbose_name="groups",
+    )
+    user_permissions = models.ManyToManyField(
+        Permission,
+        related_name="tns_custom_metrics_user_permission_set",
+        blank=True,
+        help_text="Specific permissions for this user.",
+        verbose_name="user permissions",
+    )
 
     class Meta:
         verbose_name = "User"
