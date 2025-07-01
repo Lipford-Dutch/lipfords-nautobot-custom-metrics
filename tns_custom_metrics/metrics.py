@@ -111,16 +111,20 @@ def metric_jobs(type_of_job):
     yield execution_status_gauge
 
 
-def metric_models(params):
+def metric_models(params=None):
     """Return Models count in Prometheus Metric format.
 
     Args:
-        params (dict): list of models to return organized per application
+        params (dict | None): list of models to return organized per application.
+            Defaults to values from plugin settings.
 
     Return:
         Iterator[GaugeMetricFamily]
             nautobot_model_count: with model name and application name as labels
     """
+    if params is None:
+        params = PLUGIN_SETTINGS.get("models", {})
+
     gauge = GaugeMetricFamily("nautobot_model_count", "Per Nautobot Model count", labels=["app", "name"])
     for app in params:
         app_config = deepcopy(params[app])  # Avoid changing the dictionary we are iterating over
