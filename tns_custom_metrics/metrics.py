@@ -15,7 +15,7 @@ from nautobot.extras.models import JobResult
 from packaging import version
 from prometheus_client.core import GaugeMetricFamily, Metric
 
-from .models import (
+from tns_custom_metrics.models import (
     APIRequest,
     FeatureRelease,
     FeatureUsage,
