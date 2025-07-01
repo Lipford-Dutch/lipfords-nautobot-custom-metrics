@@ -130,6 +130,7 @@ nav:
       - Contributing to the App: "dev/contributing.md"
       - Development Environment: "dev/dev_environment.md"
       - Release Checklist: "dev/release_checklist.md"
+      - Testing Best Practices: "dev/testing_best_practices.md"
       - Code Reference:
           - "dev/code_reference/index.md"
           - Package: "dev/code_reference/package.md"
