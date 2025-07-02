@@ -189,8 +189,8 @@ def metric_versions():
 # 1. Active Users
 
 def collect_daily_active_users():
-    """
-    Gauge: nautobot_user_dau{date,team,device_vendor,device_type}
+    """Gauge: nautobot_user_dau{date,team,device_vendor,device_type}.
+
     Unique users interacting (UI + API) in last 7-day window by team and device.
     """
     today = timezone.now().date()
@@ -219,8 +219,8 @@ def collect_daily_active_users():
 
 
 def collect_monthly_active_users():
-    """
-    Gauge: nautobot_user_mau{month,team,device_vendor,device_type}
+    """Gauge: nautobot_user_mau{month,team,device_vendor,device_type}.
+
     Unique monthly active users (UI + API) with MoM comparisons.
     """
     now = timezone.now()
@@ -249,8 +249,8 @@ def collect_monthly_active_users():
 
 
 def collect_dau_mau_ratio():
-    """
-    Gauge: nautobot_user_dau_mau_ratio{date,team}
+    """Gauge: nautobot_user_dau_mau_ratio{date,team}.
+
     Daily DAU/MAU ratio, segmented by team, updated daily.
     """
     today = timezone.now().date().isoformat()
@@ -280,8 +280,8 @@ def collect_dau_mau_ratio():
 # 2. Session Metrics
 
 def collect_session_duration():
-    """
-    Gauge: nautobot_session_avg_duration_seconds{interval,team}
+    """Gauge: nautobot_session_avg_duration_seconds{interval,team}.
+
     Average session duration in seconds over 7-day and 30-day windows, segmented by team.
     """
     now = timezone.now()
@@ -308,8 +308,8 @@ def collect_session_duration():
 
 
 def collect_session_frequency():
-    """
-    Gauge: nautobot_sessions_per_user{user,team}
+    """Gauge: nautobot_sessions_per_user{user,team}.
+
     Number of sessions per user (all time). Admins filter via Prometheus query range.
     """
     qs = (
@@ -328,8 +328,8 @@ def collect_session_frequency():
 # 3. Feature Usage
 
 def collect_top_features_used():
-    """
-    Gauge: nautobot_feature_usage_top{feature,interval,team,user,module}
+    """Gauge: nautobot_feature_usage_top{feature,interval,team,user,module}.
+
     Top 10 features by usage count in 7-day and 30-day windows, segmented.
     """
     now = timezone.now()
@@ -354,9 +354,9 @@ def collect_top_features_used():
 
 
 def collect_feature_adoption_rate():
-    """
-    Gauge: nautobot_feature_adoption_rate{feature,team}
-    % of users adopting each new feature within 30 days, segmented by team.
+    """Gauge: nautobot_feature_adoption_rate{feature,team}.
+
+    Percentage of users adopting each new feature within 30 days, segmented by team.
     """
     total = User.objects.count()
     gauge = GaugeMetricFamily(
@@ -382,8 +382,8 @@ def collect_feature_adoption_rate():
 # 4. User Actions
 
 def collect_user_logins():
-    """
-    Gauge: nautobot_user_logins_total{user,team}
+    """Gauge: nautobot_user_logins_total{user,team}.
+
     Total login count per user, segmented by team; windows via PromQL.
     """
     qs = (
@@ -402,8 +402,8 @@ def collect_user_logins():
 
 
 def collect_api_calls():
-    """
-    Gauge: nautobot_api_requests_total{endpoint,interval,team}
+    """Gauge: nautobot_api_requests_total{endpoint,interval,team}.
+
     API call counts per endpoint in 7-day and 30-day windows, segmented by team.
     """
     now = timezone.now()
