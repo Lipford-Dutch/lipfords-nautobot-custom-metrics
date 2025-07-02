@@ -113,6 +113,16 @@ def metric_jobs(type_of_job):
     yield execution_status_gauge
 
 
+def metric_git_repository_jobs():
+    """Wrapper for :func:`metric_jobs` for Git repository jobs."""
+    yield from metric_jobs(type_of_job="git_repository")
+
+
+def metric_standard_jobs():
+    """Wrapper for :func:`metric_jobs` for standard jobs."""
+    yield from metric_jobs(type_of_job="job")
+
+
 def metric_models(params=None):
     """Return Models count in Prometheus Metric format.
 
@@ -424,6 +434,7 @@ metrics = [
     collect_dau_mau_ratio,
     collect_monthly_active_users,
     metric_models,
-    metric_jobs,
+    metric_standard_jobs,
+    metric_git_repository_jobs,
     metric_versions,
 ]

@@ -11,8 +11,9 @@ from prometheus_client.core import CollectorRegistry, GaugeMetricFamily
 from tns_custom_metrics import __REGISTRY__
 from tns_custom_metrics.metrics import (
     collect_extras_metric,
-    metric_jobs,
+    metric_git_repository_jobs,
     metric_models,
+    metric_standard_jobs,
     metric_versions,
 )
 
@@ -28,11 +29,11 @@ class AppMetricsCollector:
         start = time.time()
 
         if "gitrepositories" in PLUGIN_SETTINGS and PLUGIN_SETTINGS["gitrepositories"]:
-            for metric in metric_jobs(type_of_job="git_repository"):
+            for metric in metric_git_repository_jobs():
                 yield metric
 
         if "jobs" in PLUGIN_SETTINGS and PLUGIN_SETTINGS["jobs"]:
-            for metric in metric_jobs(type_of_job="job"):
+            for metric in metric_standard_jobs():
                 yield metric
 
         if "models" in PLUGIN_SETTINGS:
