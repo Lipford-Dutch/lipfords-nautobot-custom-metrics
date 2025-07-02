@@ -1,12 +1,13 @@
+"""Database models for the ``tns_custom_metrics`` application."""
+
 # Reference: NAC-1725, Sprint 37
 # ------------------------- models.py (Reviewed) -------------------------
-from django.db import models
 from django.contrib.auth.models import AbstractUser, Group, Permission
+from django.db import models
+
 
 class User(AbstractUser):
-    """
-    Extended user model with team, role, and organization.
-    """
+    """Extended user model with team, role, and organization."""
     team = models.CharField(max_length=100)
     role = models.CharField(max_length=50)
     organization = models.CharField(max_length=100, blank=True)
@@ -26,16 +27,18 @@ class User(AbstractUser):
     )
 
     class Meta:
+        """Metadata options for the ``User`` model."""
         verbose_name = "User"
         verbose_name_plural = "Users"
         ordering = ["team", "username"]
 
     def __str__(self):
+        """Return a readable representation of the user."""
         return f"{self.username} ({self.team})"
 
 class UserInteraction(models.Model):
-    """
-    Logs each user event: UI click, API call, or login.
+    """Logs each user event: UI click, API call, or login.
+
     Includes device metadata and module context.
     """
     EVENT_UI = 'ui'
@@ -56,6 +59,7 @@ class UserInteraction(models.Model):
     module = models.CharField(max_length=100, null=True, blank=True)
 
     class Meta:
+        """Metadata options for the ``UserInteraction`` model."""
         indexes = [
             models.Index(fields=['timestamp']),
             models.Index(fields=['user', 'event_type']),
@@ -65,43 +69,44 @@ class UserInteraction(models.Model):
         verbose_name_plural = 'User Interactions'
 
     def __str__(self):
+        """Return a readable representation of the interaction."""
         return f"{self.user.username} {self.event_type} at {self.timestamp.isoformat()}"
 
 class SessionRecord(models.Model):
-    """
-    Tracks the start and end of a user session.
-    """
+    """Tracks the start and end of a user session."""
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sessions')
     start = models.DateTimeField()
     end = models.DateTimeField()
 
     class Meta:
+        """Metadata options for the ``SessionRecord`` model."""
         indexes = [models.Index(fields=['start', 'end']),]
         verbose_name = 'Session Record'
         verbose_name_plural = 'Session Records'
 
     def __str__(self):
+        """Return a readable representation of the session duration."""
         duration = self.end - self.start
         return f"Session for {self.user.username}: {duration.total_seconds()}s"
 
 class FeatureRelease(models.Model):
-    """
-    Records each feature release date for adoption tracking.
-    """
+    """Records each feature release date for adoption tracking."""
     name = models.CharField(max_length=100, unique=True)
     release_date = models.DateTimeField()
 
     class Meta:
+        """Metadata options for the ``FeatureRelease`` model."""
         ordering = ['-release_date']
         verbose_name = 'Feature Release'
         verbose_name_plural = 'Feature Releases'
 
     def __str__(self):
+        """Return a readable representation of the feature release."""
         return f"{self.name} released on {self.release_date.date()}"
 
 class FeatureUsage(models.Model):
-    """
-    Logs each feature invocation by a user.
+    """Logs each feature invocation by a user.
+
     Module field ties usage to app context.
     """
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='feature_usages')
@@ -110,25 +115,27 @@ class FeatureUsage(models.Model):
     module = models.CharField(max_length=100)
 
     class Meta:
+        """Metadata options for the ``FeatureUsage`` model."""
         indexes = [models.Index(fields=['feature_name', 'timestamp']),]
         verbose_name = 'Feature Usage'
         verbose_name_plural = 'Feature Usages'
 
     def __str__(self):
+        """Return a readable representation of the feature usage."""
         return f"{self.user.username} used {self.feature_name} at {self.timestamp.isoformat()}"
 
 class APIRequest(models.Model):
-    """
-    Logs each API request call for endpoint usage metrics.
-    """
+    """Logs each API request call for endpoint usage metrics."""
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='api_requests')
     endpoint = models.CharField(max_length=200)
     timestamp = models.DateTimeField(auto_now_add=True)
 
     class Meta:
+        """Metadata options for the ``APIRequest`` model."""
         indexes = [models.Index(fields=['endpoint', 'timestamp']),]
         verbose_name = 'API Request'
         verbose_name_plural = 'API Requests'
 
     def __str__(self):
+        """Return a readable representation of the API request."""
         return f"{self.user.username} called {self.endpoint} at {self.timestamp.isoformat()}"
