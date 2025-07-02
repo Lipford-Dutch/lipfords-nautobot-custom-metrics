@@ -29,6 +29,8 @@ logger = logging.getLogger(__name__)
 nautobot_version = version.parse(settings.VERSION)
 
 PLUGIN_SETTINGS = settings.PLUGINS_CONFIG["tns_custom_metrics"]["app_metrics"]
+# Backwards compatibility for earlier releases
+PLUGIN_SETTING = PLUGIN_SETTINGS
 def collect_extras_metric(funcs):
     """Collect Third party functions to generate additional Metrics.
 
