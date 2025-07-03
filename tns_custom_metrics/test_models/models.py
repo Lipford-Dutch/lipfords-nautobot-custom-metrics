@@ -1,3 +1,4 @@
+# ruff: noqa
 # Reference: NAC-1725, Sprint 37
 # ------------------------- models.py (Reviewed) -------------------------
 from django.contrib.auth.models import AbstractUser, Group, Permission

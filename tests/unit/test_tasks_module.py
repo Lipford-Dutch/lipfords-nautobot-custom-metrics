@@ -19,19 +19,22 @@ from tasks import is_truthy
     ],
 )
 def test_is_truthy(value, expected):
-    assert is_truthy(value) is expected
+    """Return True for truthy values and False otherwise."""
+    assert is_truthy(value) is expected  # noqa: S101
 
 
 @given(st.booleans())
 def test_is_truthy_idempotent(b):
-    assert is_truthy(b) is b
+    """Ensure the helper is idempotent for boolean input."""
+    assert is_truthy(b) is b  # noqa: S101
 
 
 @given(
     st.text().filter(
-        lambda s: s.lower() not in {"y","yes","t","true","on","1","n","no","f","false","off","0"}
+        lambda s: s.lower() not in {"y", "yes", "t", "true", "on", "1", "n", "no", "f", "false", "off", "0"}
     )
 )
 def test_is_truthy_invalid(s):
+    """Validate that invalid strings raise ``ValueError``."""
     with pytest.raises(ValueError):
         is_truthy(s)

@@ -7,6 +7,7 @@ import pytest
 
 
 def import_init():
+    """Import ``tns_custom_metrics.__init__`` with a dummy Nautobot module."""
     dummy_nautobot = types.ModuleType("nautobot")
     apps = types.ModuleType("nautobot.apps")
     class DummyConfig:
@@ -21,16 +22,20 @@ def import_init():
 
 
 def test_register_metric_func_valid():
+    """Verify that ``register_metric_func`` adds the callable to the registry."""
     mod = import_init()
     called = []
+
     def func():
         called.append(True)
+
     mod.register_metric_func(func)
-    assert mod.__REGISTRY__[-1] is func
+    assert mod.__REGISTRY__[-1] is func  # noqa: S101
 
 
-@pytest.mark.parametrize('val', [123, 'x', object()])
+@pytest.mark.parametrize("val", [123, "x", object()])
 def test_register_metric_func_invalid(val):
+    """Ensure ``register_metric_func`` rejects non-callables."""
     mod = import_init()
     with pytest.raises(TypeError):
         mod.register_metric_func(val)

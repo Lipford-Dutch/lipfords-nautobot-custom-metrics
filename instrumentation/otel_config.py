@@ -9,9 +9,9 @@ from opentelemetry.sdk.trace.export.in_memory_span_exporter import InMemorySpanE
 
 RUN_ID = os.getenv("OTEL_TEST_RUN_ID", "local")
 
-"""Configure tracing provider and return a tracer."""
 
 def setup_tracing():
+    """Configure a tracing provider and return a tracer."""
     resource = Resource.create({"service.name": "qa-tests", "run_id": RUN_ID})
     exporter = InMemorySpanExporter()
     provider = TracerProvider(resource=resource)
