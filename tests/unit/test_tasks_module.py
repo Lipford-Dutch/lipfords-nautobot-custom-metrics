@@ -1,8 +1,10 @@
 """Unit tests for task helpers."""
 import pytest
-from hypothesis import given, strategies as st
+from hypothesis import given
+from hypothesis import strategies as st
 
 from tasks import is_truthy
+
 
 @pytest.mark.parametrize(
     "value,expected",

@@ -1,5 +1,11 @@
 """Unit tests for tns_custom_metrics."""
 
+import pytest
+from django.conf import settings
+
+if not hasattr(settings, "CELERY_TASK_DEFAULT_QUEUE"):
+    pytest.skip("Celery not configured", allow_module_level=True)
+
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse

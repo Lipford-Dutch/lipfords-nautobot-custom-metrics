@@ -1,0 +1,6 @@
+[run]
+omit =
+    tasks.py
+    development/*
+    tns_custom_metrics/metrics.py
+    tns_custom_metrics/tests/*

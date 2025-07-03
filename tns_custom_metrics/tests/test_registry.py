@@ -1,11 +1,11 @@
 """Test cases for tns_custom_metrics app metric function registry."""
 
-from django.test import TestCase
+import unittest
 
 from tns_custom_metrics import __REGISTRY__, register_metric_func
 
 
-class RegistryTests(TestCase):
+class RegistryTests(unittest.TestCase):
     """Test cases for ensuring the registry is working properly."""
 
     def test_register_metric_func(self):
