@@ -7,6 +7,7 @@ from prometheus_client.core import GaugeMetricFamily
 
 
 def load_metrics():
+    """Import the metrics module with a minimal Django shim."""
     # minimal django
     conf = types.ModuleType('django.conf')
     conf.settings = types.SimpleNamespace(
@@ -62,11 +63,15 @@ def load_metrics():
 
 
 def test_collect_extras_metric():
+    """Ensure extra metric functions are executed and collected."""
     mod = load_metrics()
     gauge = GaugeMetricFamily('x','x')
+
     def good():
         return [gauge]
+
     def bad_iter():
         return 'not_iter'
+
     metrics = list(mod.collect_extras_metric([good, bad_iter, 'nope']))
-    assert gauge in metrics
+    assert gauge in metrics  # noqa: S101
