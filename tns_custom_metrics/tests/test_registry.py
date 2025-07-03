@@ -2,6 +2,10 @@
 
 import unittest
 
+import pytest
+
+pytest.importorskip("nautobot")
+
 from tns_custom_metrics import __REGISTRY__, register_metric_func
 
 

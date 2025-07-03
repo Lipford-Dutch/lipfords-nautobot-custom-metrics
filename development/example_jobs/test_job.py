@@ -3,6 +3,9 @@
 import time
 
 import pytest
+
+pytest.importorskip("django")
+
 from django import setup as django_setup
 from django.conf import settings
 

@@ -4,6 +4,10 @@ import tempfile
 import types
 from unittest.mock import MagicMock
 
+import pytest
+
+pytest.importorskip("invoke")
+
 import tasks
 
 
@@ -47,7 +51,7 @@ def test_run_command_remote_exec_when_running(monkeypatch):
     docker_mock = MagicMock()
     docker_mock.side_effect = [
         types.SimpleNamespace(stdout="svc\n"),
-        types.SimpleNamespace(stdout="")
+        types.SimpleNamespace(stdout=""),
     ]
     monkeypatch.setattr(tasks, "docker_compose", docker_mock)
     tasks.run_command(ctx, "cmd", service="svc", pty=False)
@@ -60,9 +64,8 @@ def test_run_command_remote_run_when_not_running(monkeypatch):
     docker_mock = MagicMock()
     docker_mock.side_effect = [
         types.SimpleNamespace(stdout="other\n"),
-        types.SimpleNamespace(stdout="")
+        types.SimpleNamespace(stdout=""),
     ]
     monkeypatch.setattr(tasks, "docker_compose", docker_mock)
     tasks.run_command(ctx, "cmd", service="svc", pty=False)
     docker_mock.assert_called_with(ctx, "run --rm --entrypoint='cmd' svc", pty=False)
-

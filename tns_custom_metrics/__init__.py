@@ -5,7 +5,15 @@ from importlib import metadata
 from importlib.metadata import PackageNotFoundError
 from typing import Callable
 
-from nautobot.apps import NautobotAppConfig
+try:
+    from nautobot.apps import NautobotAppConfig
+except ModuleNotFoundError:  # pragma: no cover - allow tests without Nautobot
+
+    class NautobotAppConfig:  # type: ignore[too-few-public-methods]
+        """Fallback placeholder when Nautobot isn't installed."""
+
+        pass
+
 
 try:
     __version__ = metadata.version(__name__)

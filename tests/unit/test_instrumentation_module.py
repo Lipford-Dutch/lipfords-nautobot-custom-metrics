@@ -1,5 +1,8 @@
 """Tests for the OpenTelemetry instrumentation helpers."""
 
+import pytest
+
+pytest.importorskip("opentelemetry")
 from opentelemetry import trace
 from opentelemetry.sdk.trace import TracerProvider
 
@@ -23,4 +26,3 @@ def test_setup_tracing_sets_provider(monkeypatch):
     assert provider.resource.attributes["service.name"] == "qa-tests"  # noqa: S101
     assert provider.resource.attributes["run_id"] == "test123"  # noqa: S101
     assert tracer is not None  # noqa: S101
-
