@@ -6,8 +6,12 @@ import types
 
 import pytest
 
-pytest.importorskip("prometheus_client")
-from prometheus_client.core import GaugeMetricFamily
+pytestmark = pytest.mark.unit
+
+try:  # pragma: no cover - optional dependency
+    from prometheus_client.core import GaugeMetricFamily
+except ModuleNotFoundError:  # pragma: no cover - skip if missing
+    pytest.skip("prometheus_client not installed", allow_module_level=True)
 
 
 def load_metrics():
@@ -72,9 +76,15 @@ def load_metrics():
     return importlib.import_module("tns_custom_metrics.metrics")
 
 
-def test_collect_extras_metric():
+@pytest.fixture()
+def metrics_module():
+    """Return the imported metrics module with a minimal Django setup."""
+    return load_metrics()
+
+
+def test_collect_extras_metric(metrics_module):
     """Ensure extra metric functions are executed and collected."""
-    mod = load_metrics()
+    mod = metrics_module
     gauge = GaugeMetricFamily("x", "x")
 
     def good():
