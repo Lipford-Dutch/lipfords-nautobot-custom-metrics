@@ -2,13 +2,15 @@
 
 import pytest
 
-pytest.importorskip("invoke")
-pytest.importorskip("hypothesis")
+pytestmark = pytest.mark.unit
 
-from hypothesis import given
-from hypothesis import strategies as st
+pytest.importorskip("invoke")  # noqa: E402
+pytest.importorskip("hypothesis")  # noqa: E402
 
-from tasks import is_truthy
+from hypothesis import given  # noqa: E402
+from hypothesis import strategies as st  # noqa: E402
+
+from tasks import is_truthy  # noqa: E402
 
 
 @pytest.mark.parametrize(

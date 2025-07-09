@@ -1,26 +1,26 @@
 """Test cases for tns_custom_metrics app metric function registry."""
 
-import unittest
-
 import pytest
+
+pytestmark = [pytest.mark.unit]
 
 pytest.importorskip("nautobot")
 
-from tns_custom_metrics import __REGISTRY__, register_metric_func
+from tns_custom_metrics import __REGISTRY__, register_metric_func  # noqa: E402
 
 
-class RegistryTests(unittest.TestCase):
-    """Test cases for ensuring the registry is working properly."""
+def test_register_metric_func():
+    """Ensure functions can be registered and invalid types are rejected."""
 
-    def test_register_metric_func(self):
-        """Ensure the function to add functions to the registry is working properly."""
+    def myfunction():
+        """Dummy metric function."""
 
-        def myfunction():
-            """Dummy metric function."""
+    with pytest.raises(TypeError):
+        register_metric_func("test")
+    with pytest.raises(TypeError):
+        register_metric_func({"test": "test"})
+    with pytest.raises(TypeError):
+        register_metric_func([1, 2, 3])
 
-        self.assertRaises(TypeError, register_metric_func, "test")
-        self.assertRaises(TypeError, register_metric_func, {"test": "test"})
-        self.assertRaises(TypeError, register_metric_func, [1, 2, 3])
-
-        register_metric_func(myfunction)
-        self.assertEqual(__REGISTRY__[-1], myfunction)
+    register_metric_func(myfunction)
+    assert __REGISTRY__[-1] is myfunction

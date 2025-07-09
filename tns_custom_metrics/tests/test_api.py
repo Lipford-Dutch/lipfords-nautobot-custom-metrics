@@ -2,30 +2,35 @@
 
 import pytest
 
-pytest.importorskip("nautobot")
+pytestmark = pytest.mark.integration
 
-from django.conf import settings
+try:  # pragma: no cover - optional dependency
+    import nautobot  # noqa: F401
+except Exception:
+    pytest.skip("Nautobot not installed", allow_module_level=True)
+
+from django.conf import settings  # noqa: E402
+from django.contrib.auth import get_user_model  # noqa: E402
+from django.urls import reverse  # noqa: E402
+from nautobot.core.testing import APITestCase  # noqa: E402
+from rest_framework import status  # noqa: E402
+from rest_framework.test import APIClient  # noqa: E402
+
+from .factories import TokenFactory, UserFactory  # noqa: E402
 
 if not hasattr(settings, "CELERY_TASK_DEFAULT_QUEUE"):
     pytest.skip("Celery not configured", allow_module_level=True)
 
-from django.contrib.auth import get_user_model
-from django.test import TestCase
-from django.urls import reverse
-from nautobot.users.models import Token
-from rest_framework import status
-from rest_framework.test import APIClient
-
 User = get_user_model()
 
 
-class PlaceholderAPITest(TestCase):
+class PlaceholderAPITest(APITestCase):
     """Test the NautobotCapacityMetrics API."""
 
     def setUp(self):
         """Create a superuser and token for API calls."""
-        self.user = User.objects.create(username="testuser", is_superuser=True)
-        self.token = Token.objects.create(user=self.user)
+        self.user = UserFactory()
+        self.token = TokenFactory(user=self.user)
         self.client = APIClient()
         self.client.credentials(HTTP_AUTHORIZATION=f"Token {self.token.key}")
 
