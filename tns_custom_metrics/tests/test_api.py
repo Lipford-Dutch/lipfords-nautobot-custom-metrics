@@ -1,6 +1,9 @@
 """Unit tests for tns_custom_metrics."""
 
 import pytest
+
+pytest.importorskip("nautobot")
+
 from django.conf import settings
 
 if not hasattr(settings, "CELERY_TASK_DEFAULT_QUEUE"):

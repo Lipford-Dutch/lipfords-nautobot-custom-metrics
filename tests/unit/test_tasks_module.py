@@ -1,5 +1,10 @@
 """Unit tests for task helpers."""
+
 import pytest
+
+pytest.importorskip("invoke")
+pytest.importorskip("hypothesis")
+
 from hypothesis import given
 from hypothesis import strategies as st
 
@@ -31,7 +36,8 @@ def test_is_truthy_idempotent(b):
 
 @given(
     st.text().filter(
-        lambda s: s.lower() not in {"y", "yes", "t", "true", "on", "1", "n", "no", "f", "false", "off", "0"}
+        lambda s: s.lower()
+        not in {"y", "yes", "t", "true", "on", "1", "n", "no", "f", "false", "off", "0"}
     )
 )
 def test_is_truthy_invalid(s):

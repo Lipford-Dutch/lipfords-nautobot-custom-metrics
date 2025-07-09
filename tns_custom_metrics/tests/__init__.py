@@ -1,5 +1,12 @@
 """Unit tests for tns_custom_metrics app."""
 
+import pkgutil
+
+import pytest
+
+if not (pkgutil.find_loader("django") and pkgutil.find_loader("nautobot")):
+    pytest.skip("Django or Nautobot not installed", allow_module_level=True)
+
 from django.conf import settings
 
 if not settings.configured:
@@ -14,7 +21,9 @@ if not settings.configured:
             "nautobot.extras",
             "tns_custom_metrics",
         ],
-        DATABASES={"default": {"ENGINE": "django.db.backends.sqlite3", "NAME": ":memory:"}},
+        DATABASES={
+            "default": {"ENGINE": "django.db.backends.sqlite3", "NAME": ":memory:"}
+        },
         ROOT_URLCONF="tns_custom_metrics.urls",
         ALLOWED_URL_SCHEMES=["http", "https"],
         USE_TZ=True,
