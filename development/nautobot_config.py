@@ -133,8 +133,14 @@ MIDDLEWARE = [
 # Enable installed Apps. Add the name of each App to the list.
 PLUGINS = [
     "tns_custom_metrics",
-    "tns_custom_metrics.test_models",
 ]
+
+# The test-only model app (used to validate the model-count metric) is registered
+# as a plain Django app rather than a PLUGINS entry. Nautobot 3.x resolves PLUGINS
+# entries by Django app *label*, and this nested app's label ("test_models") does
+# not match its dotted module path ("tns_custom_metrics.test_models"), which would
+# otherwise crash dynamic job import during migrate/test database setup.
+INSTALLED_APPS.append("tns_custom_metrics.test_models.TestConfig")  # noqa: F405
 
 # Apps configuration settings. These settings are used by various Apps that the user may have installed.
 # Each key in the dictionary is the name of an installed App and its value is a dictionary of settings.

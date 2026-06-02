@@ -21,8 +21,8 @@ class TestConfig(NautobotAppConfig):
     description = "App that exists solely to test tns_custom_metrics, don't install.."
     base_url = "capacity-metrics-test"
     required_settings = []
-    min_version = "2.4.34"
-    max_version = "2.9999"
+    min_version = "3.0.0"
+    max_version = "3.9999"
     default_settings = {}
     caching_config = {}
 

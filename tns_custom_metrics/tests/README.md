@@ -7,10 +7,10 @@ Network to Code QA Team
 Integration tests for the Nautobot plugin endpoints and API access.
 
 ## When/Where
-Run during CI with Nautobot installed. Skipped otherwise.
+Run during CI with Nautobot installed via `nautobot-server test tns_custom_metrics`.
 
 ## Inputs & Outputs
-Uses Django database with factories (`UserFactory`, `TokenFactory`). Expects HTTP 200 responses.
+Uses Django database with factories (`UserFactory`, `TokenFactory`, requiring `factory-boy`). Expects HTTP 200 responses.
 
 ## Best Practices
-Tagged with `@pytest.mark.integration` and executed via `TransactionTestCase`-derived classes when jobs are involved.
+Implemented as `unittest`/`django.test.TestCase`-derived classes executed by the Django test runner.
