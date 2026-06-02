@@ -50,7 +50,7 @@ class TnsCustomMetricsConfig(NautobotAppConfig):
     description = "Lightweight Nautobot App to expose additional metrics as Prometheus endpoints. Includes exposing Nautobot object data and metrics that can be collected and later viewed in Visualization tools."
     base_url = "capacity-metrics"
     required_settings = []
-    min_version = "3.0.0"
+    min_version = "3.1.0"
     max_version = "3.9999"
     default_settings = {
         "app_metrics": {

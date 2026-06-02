@@ -2,11 +2,7 @@
 
 import unittest
 
-import pytest
-
 from tns_custom_metrics import __REGISTRY__, register_metric_func
-
-pytestmark = pytest.mark.unit
 
 
 class RegisterMetricFuncTestCase(unittest.TestCase):

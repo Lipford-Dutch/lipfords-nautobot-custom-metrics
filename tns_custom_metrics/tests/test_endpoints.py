@@ -1,11 +1,8 @@
 """Test cases for tns_custom_metrics views."""
 
-import pytest
 from django.test import TestCase
 from django.urls import reverse
 from rest_framework import status
-
-pytestmark = pytest.mark.integration
 
 
 class AppMetricEndpointTests(TestCase):

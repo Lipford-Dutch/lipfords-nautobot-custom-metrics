@@ -1,7 +1,7 @@
 ---
 tns_custom_metrics:
-  nautobot_ver: "2.0.1"
-  python_ver: "3.11"
+  nautobot_ver: "3.1.1"
+  python_ver: "3.12"
   local: true
   # compose_dir: "/full/path/to/tns-custom-metrics/development"
 

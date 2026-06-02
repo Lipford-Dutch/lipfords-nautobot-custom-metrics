@@ -8,10 +8,6 @@ try:
 except ModuleNotFoundError:  # Python <3.11
     import tomli as toml
 
-import pytest
-
-pytestmark = pytest.mark.unit
-
 
 class DocsRequirementsTestCase(unittest.TestCase):
     """Ensure the documentation requirements stay in sync with the project metadata."""

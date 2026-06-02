@@ -1,14 +1,11 @@
 """Smoke tests for the Nautobot REST API with tns_custom_metrics installed."""
 
-import pytest
 from django.test import TestCase
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APIClient
 
 from .factories import TokenFactory, UserFactory
-
-pytestmark = pytest.mark.integration
 
 
 class PlaceholderAPITest(TestCase):
