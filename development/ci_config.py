@@ -10,7 +10,6 @@ production use -- the development/runtime configuration is
 import os
 
 from nautobot.core.settings import *  # noqa: F403
-from nautobot.core.settings_funcs import is_truthy  # noqa: F401
 
 # Permissive so the test client's "testserver" host is accepted.
 ALLOWED_HOSTS = ["*"]
