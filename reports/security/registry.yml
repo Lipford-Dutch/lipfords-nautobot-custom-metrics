@@ -13,14 +13,14 @@ tickets:
     title: Refresh vulnerable runtime dependencies
     assignee: codex
     priority: P0
-    status: ready_for_implementation
+    status: implemented
     root_cause: stale_runtime_dependency_resolution
     planned_branch: security/TNSCM-SEC-2026-001-runtime-dependency-refresh
     documentation:
       - reports/security/README.md#tnscm-sec-2026-001-refresh-vulnerable-runtime-dependencies
       - reports/security/VULNERABILITY-REPORT-2026-06-02.md#tnscm-sec-2026-001-runtime-dependency-resolution
     fix:
-      commit: pending
+      commit: 3871a0e296373873cce00f7e4414d23d406c1acf
       pull_request: pending
       release_note: changes/TNSCM-SEC-2026-001.security.md
     vulnerabilities:

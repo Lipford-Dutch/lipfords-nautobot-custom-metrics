@@ -13,8 +13,6 @@ classifiers = [
     "Intended Audience :: Developers",
     "Development Status :: 5 - Production/Stable",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.8",
-    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
@@ -28,9 +26,9 @@ include = [
 ]
 
 [tool.poetry.dependencies]
-python = ">=3.8,<3.13"
+python = ">=3.10,<3.13"
 # Used for local development
-nautobot = "^2.0.0"
+nautobot = "^2.4.34"
 
 [tool.poetry.group.dev.dependencies]
 coverage = "*"
@@ -89,12 +87,12 @@ notes = """,
 
 [tool.pylint-nautobot]
 supported_nautobot_versions = [
-    "2.0.0"
+    "2.4.34"
 ]
 
 [tool.ruff]
 line-length = 120
-target-version = "py38"
+target-version = "py310"
 
 [tool.ruff.lint]
 select = [
@@ -199,4 +197,3 @@ markers = [
     "unit: unit tests",
     "integration: integration tests",
 ]
-
