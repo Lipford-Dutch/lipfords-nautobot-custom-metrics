@@ -2,6 +2,10 @@
 
 import pytest
 
+pytest.importorskip("opentelemetry")
+from opentelemetry import trace
+from opentelemetry.sdk.trace import TracerProvider
+
 pytestmark = pytest.mark.unit
 
 try:  # pragma: no cover - optional dependency

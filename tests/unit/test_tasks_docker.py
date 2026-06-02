@@ -6,6 +6,10 @@ from unittest.mock import MagicMock
 
 import pytest
 
+pytest.importorskip("invoke")
+
+import tasks
+
 pytestmark = pytest.mark.unit
 
 pytest.importorskip("invoke")  # noqa: E402

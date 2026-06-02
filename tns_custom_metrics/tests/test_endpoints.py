@@ -2,13 +2,12 @@
 
 import pytest
 
-pytestmark = pytest.mark.integration
+pytest.importorskip("nautobot")
 
-pytest.importorskip("nautobot")  # noqa: E402
-
-from django.urls import NoReverseMatch, reverse  # noqa: E402
-from nautobot.core.testing import APITestCase  # noqa: E402
-from rest_framework import status  # noqa: E402
+from django.test import TestCase
+from django.urls import NoReverseMatch, reverse
+from rest_framework import status
+from rest_framework.test import APIClient
 
 try:
     APP_METRIC_URL = reverse(

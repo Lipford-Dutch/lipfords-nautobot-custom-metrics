@@ -2,6 +2,12 @@
 
 import pytest
 
+pytest.importorskip("invoke")
+pytest.importorskip("hypothesis")
+
+from hypothesis import given
+from hypothesis import strategies as st
+
 pytestmark = pytest.mark.unit
 
 pytest.importorskip("invoke")  # noqa: E402

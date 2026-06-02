@@ -2,21 +2,9 @@
 
 import pytest
 
-pytestmark = pytest.mark.integration
+pytest.importorskip("nautobot")
 
-try:  # pragma: no cover - optional dependency
-    import nautobot  # noqa: F401
-except Exception:
-    pytest.skip("Nautobot not installed", allow_module_level=True)
-
-from django.conf import settings  # noqa: E402
-from django.contrib.auth import get_user_model  # noqa: E402
-from django.urls import reverse  # noqa: E402
-from nautobot.core.testing import APITestCase  # noqa: E402
-from rest_framework import status  # noqa: E402
-from rest_framework.test import APIClient  # noqa: E402
-
-from .factories import TokenFactory, UserFactory  # noqa: E402
+from django.conf import settings
 
 if not hasattr(settings, "CELERY_TASK_DEFAULT_QUEUE"):
     pytest.skip("Celery not configured", allow_module_level=True)
