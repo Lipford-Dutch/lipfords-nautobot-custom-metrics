@@ -1,0 +1,17 @@
+{
+  "skillListingBudgetFraction": 0.05,
+  "hooks": {
+    "SubagentStop": [
+      {
+        "matcher": "fastapi-expert|typescript-expert",
+        "hooks": [
+          {
+            "type": "prompt",
+            "prompt": "Analyze the completed agent work and determine if API integration validation is needed.\n\nCONTEXT: $ARGUMENTS\n\nTRIGGER CRITERIA (respond {ok: false} to continue with integration-validator):\n\n**Backend:**\n- Changes to HTTP controllers/routes/handlers\n- New REST or GraphQL endpoints\n- Changes to DTO/request/response types\n- Changes to API authentication middleware\n\n**Frontend:**\n- New API calls (fetch, axios, ky, ofetch)\n- Changes to data fetching hooks (useQuery, useMutation, useSWR)\n- Changes to composables/services that call APIs\n- Changes to TypeScript types for API request/response\n\nDO NOT TRIGGER (respond {ok: true} to stop):\n- CSS/styling changes only\n- Text/label changes only\n- Internal refactoring without touching APIs\n- UI component changes without data fetching\n- Unit tests without integration tests\n\nRespond ONLY with valid JSON:\n{\"ok\": false, \"reason\": \"API integration detected: [description]\"} to trigger validation\n{\"ok\": true} to stop without validation",
+            "timeout": 30
+          }
+        ]
+      }
+    ]
+  }
+}

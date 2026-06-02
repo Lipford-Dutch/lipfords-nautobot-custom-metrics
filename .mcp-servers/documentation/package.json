@@ -1,0 +1,22 @@
+{
+  "name": "@dev-suite/documentation-server",
+  "version": "2.2.0",
+  "description": "MCP server for on-demand documentation fetching",
+  "type": "module",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "tsx src/index.ts",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.29.0",
+    "zod": "^3.22.0",
+    "node-fetch": "^3.3.0",
+    "cheerio": "^1.2.0",
+    "fuse.js": "^7.3.0"
+  }
+}

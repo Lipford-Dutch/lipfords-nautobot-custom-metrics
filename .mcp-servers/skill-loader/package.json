@@ -1,0 +1,19 @@
+{
+  "name": "@dev-suite/skill-loader",
+  "version": "1.0.0",
+  "description": "MCP server for lazy-loading dev-suite skill bodies on demand",
+  "type": "module",
+  "main": "dist/index.js",
+  "scripts": {
+    "prebuild": "node scripts/copy-skills.mjs",
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "node scripts/copy-skills.mjs && tsx src/index.ts",
+    "test": "node scripts/copy-skills.mjs && vitest run",
+    "test:watch": "node scripts/copy-skills.mjs && vitest",
+    "test:coverage": "node scripts/copy-skills.mjs && vitest run --coverage"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.29.0"
+  }
+}

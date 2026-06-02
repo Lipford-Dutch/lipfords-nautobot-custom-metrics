@@ -1,0 +1,36 @@
+{
+  "version": "1.0.0",
+  "installedAt": "2026-06-02T16:50:15.163Z",
+  "agents": {
+    "enabled": [
+      "architect",
+      "code-reviewer",
+      "fastapi-expert",
+      "qa-expert",
+      "devops-expert",
+      "python-integration-test-expert",
+      "open-source-expert",
+      "python-expert",
+      "ux-expert",
+      "sql-expert",
+      "integration-validator-expert"
+    ]
+  },
+  "mcpServers": {
+    "enabled": [
+      "database-query",
+      "documentation",
+      "skill-loader",
+      "security-scanner",
+      "log-analyzer",
+      "code-quality",
+      "docker-manager",
+      "api-tester",
+      "api-explorer",
+      "performance-profiler"
+    ]
+  },
+  "rules": {
+    "enabled": []
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "name": "skill-loader",
+  "description": "Lazy-loads dev-suite skill bodies on demand. Enables target projects to install a lightweight skill index rather than copying all SKILL.md files eagerly, reducing disk footprint and Claude Code startup scan cost. Skills are fetched at runtime from the dev-suite source repository.",
+  "shortDescription": "On-demand skill body loader",
+  "category": "core",
+  "tools": [
+    "list_skills",
+    "load_skill",
+    "load_quick_ref"
+  ],
+  "envVars": [
+    {
+      "name": "DEV_SUITE_ROOT",
+      "description": "Optional override: absolute path to a dev-suite source repository (for development against live skill changes). When unset, the server uses its bundled skills catalog — no configuration needed.",
+      "required": false,
+      "default": ""
+    }
+  ],
+  "recommendedFor": [],
+  "detectedWhen": [],
+  "isDefault": true
+}

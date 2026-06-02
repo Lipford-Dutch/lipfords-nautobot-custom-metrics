@@ -1,0 +1,78 @@
+{
+  "mcpServers": {
+    "database-query": {
+      "command": "node",
+      "args": [
+        "C:\\Users\\wlipford\\Documents\\GitHub\\lipfords-nautobot-custom-metrics\\.mcp-servers\\database-query\\dist\\index.js"
+      ],
+      "env": {
+        "DATABASE_URL": "postgres://nautobot:nautobot@localhost:5432/nautobot"
+      }
+    },
+    "documentation": {
+      "command": "node",
+      "args": [
+        "C:\\Users\\wlipford\\Documents\\GitHub\\lipfords-nautobot-custom-metrics\\.mcp-servers\\documentation\\dist\\index.js"
+      ],
+      "env": {
+        "KB_REPO_URL": "https://github.com/claude-dev-suite/knowledge_base.git"
+      }
+    },
+    "skill-loader": {
+      "command": "node",
+      "args": [
+        "C:\\Users\\wlipford\\Documents\\GitHub\\lipfords-nautobot-custom-metrics\\.mcp-servers\\skill-loader\\dist\\index.js"
+      ],
+      "env": {}
+    },
+    "security-scanner": {
+      "command": "node",
+      "args": [
+        "C:\\Users\\wlipford\\Documents\\GitHub\\lipfords-nautobot-custom-metrics\\.mcp-servers\\security-scanner\\dist\\index.js"
+      ],
+      "env": {}
+    },
+    "log-analyzer": {
+      "command": "node",
+      "args": [
+        "C:\\Users\\wlipford\\Documents\\GitHub\\lipfords-nautobot-custom-metrics\\.mcp-servers\\log-analyzer\\dist\\index.js"
+      ],
+      "env": {}
+    },
+    "code-quality": {
+      "command": "node",
+      "args": [
+        "C:\\Users\\wlipford\\Documents\\GitHub\\lipfords-nautobot-custom-metrics\\.mcp-servers\\code-quality\\dist\\index.js"
+      ],
+      "env": {}
+    },
+    "docker-manager": {
+      "command": "node",
+      "args": [
+        "C:\\Users\\wlipford\\Documents\\GitHub\\lipfords-nautobot-custom-metrics\\.mcp-servers\\docker-manager\\dist\\index.js"
+      ],
+      "env": {}
+    },
+    "api-tester": {
+      "command": "node",
+      "args": [
+        "C:\\Users\\wlipford\\Documents\\GitHub\\lipfords-nautobot-custom-metrics\\.mcp-servers\\api-tester\\dist\\index.js"
+      ],
+      "env": {}
+    },
+    "api-explorer": {
+      "command": "node",
+      "args": [
+        "C:\\Users\\wlipford\\Documents\\GitHub\\lipfords-nautobot-custom-metrics\\.mcp-servers\\api-explorer\\dist\\index.js"
+      ],
+      "env": {}
+    },
+    "performance-profiler": {
+      "command": "node",
+      "args": [
+        "C:\\Users\\wlipford\\Documents\\GitHub\\lipfords-nautobot-custom-metrics\\.mcp-servers\\performance-profiler\\dist\\index.js"
+      ],
+      "env": {}
+    }
+  }
+}

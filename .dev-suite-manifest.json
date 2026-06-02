@@ -1,0 +1,296 @@
+{
+  "version": "1.0.0",
+  "installedAt": "2026-06-02T16:50:15.163Z",
+  "projectPath": "C:\\Users\\wlipford\\Documents\\GitHub\\lipfords-nautobot-custom-metrics",
+  "detectedStack": {
+    "projectType": "backend",
+    "frontend": {
+      "framework": "",
+      "runtime": ""
+    },
+    "backend": {
+      "framework": "django",
+      "runtime": "python"
+    },
+    "database": {
+      "db_type": "",
+      "orm": ""
+    },
+    "testing": {
+      "unit": "pytest",
+      "e2e": ""
+    }
+  },
+  "agents": [
+    "architect",
+    "code-reviewer",
+    "fastapi-expert",
+    "qa-expert",
+    "devops-expert",
+    "python-integration-test-expert",
+    "open-source-expert",
+    "python-expert",
+    "ux-expert",
+    "sql-expert",
+    "integration-validator-expert"
+  ],
+  "mcpServers": [
+    "database-query",
+    "documentation",
+    "skill-loader",
+    "security-scanner",
+    "log-analyzer",
+    "code-quality",
+    "docker-manager",
+    "api-tester",
+    "api-explorer",
+    "performance-profiler"
+  ],
+  "features": {
+    "integration-validator-hook": {
+      "version": "1.0.0",
+      "appliedAt": "2026-06-02T16:50:20.213Z"
+    }
+  },
+  "files": [
+    {
+      "path": ".claude/settings.json",
+      "hash": "015c7d25056d13822205b8be75169befdab19ae36e4a60f4f58cbf581f748531",
+      "type": "config"
+    },
+    {
+      "path": ".claude/agents/architect.md",
+      "hash": "ce46e772cb365aedb79b4b15ca0bdf67db678f8cb9067cae3651006b279bc5a7",
+      "type": "agent",
+      "source": "C:\\Users\\wlipford\\AppData\\Local\\Programs\\@dev-suitedashboard\\resources\\dev-suite\\agents\\core\\architect.md"
+    },
+    {
+      "path": ".claude/agents/code-reviewer.md",
+      "hash": "f48b1d10c733879318b61be55f0444b92b03c783427deb0907ebbc5094ec5d2c",
+      "type": "agent",
+      "source": "C:\\Users\\wlipford\\AppData\\Local\\Programs\\@dev-suitedashboard\\resources\\dev-suite\\agents\\core\\code-reviewer.md"
+    },
+    {
+      "path": ".claude/agents/fastapi-expert.md",
+      "hash": "6b139d0c6c664c9144171e3affc63aa2eec19f8a951dddbf829f6bdb7e26877f",
+      "type": "agent",
+      "source": "C:\\Users\\wlipford\\AppData\\Local\\Programs\\@dev-suitedashboard\\resources\\dev-suite\\agents\\backend\\fastapi-expert.md"
+    },
+    {
+      "path": ".claude/agents/qa-expert.md",
+      "hash": "d7634d92227bf6bf74378106ced75b76e4459fab82c37c6e8fee2a5fca294f1c",
+      "type": "agent",
+      "source": "C:\\Users\\wlipford\\AppData\\Local\\Programs\\@dev-suitedashboard\\resources\\dev-suite\\agents\\quality\\qa-expert.md"
+    },
+    {
+      "path": ".claude/agents/devops-expert.md",
+      "hash": "7db9ff7ab4b4721b3ee894e023f5274670d58ed6a8c39159d5149d44e1c29596",
+      "type": "agent",
+      "source": "C:\\Users\\wlipford\\AppData\\Local\\Programs\\@dev-suitedashboard\\resources\\dev-suite\\agents\\infrastructure\\devops-expert.md"
+    },
+    {
+      "path": ".claude/agents/python-integration-test-expert.md",
+      "hash": "aebc099a278c246ebfa0bf0aa53995f98e00de9053fc05556ac8e9db61a89bd5",
+      "type": "agent",
+      "source": "C:\\Users\\wlipford\\AppData\\Local\\Programs\\@dev-suitedashboard\\resources\\dev-suite\\agents\\testing\\python-integration-test-expert.md"
+    },
+    {
+      "path": ".claude/agents/open-source-expert.md",
+      "hash": "d670bf5206b6c5e5b1c92c2a9e597f41523e8ddfae2a9ff95e8e8352b6cee714",
+      "type": "agent",
+      "source": "C:\\Users\\wlipford\\AppData\\Local\\Programs\\@dev-suitedashboard\\resources\\dev-suite\\agents\\quality\\open-source-expert.md"
+    },
+    {
+      "path": ".claude/agents/python-expert.md",
+      "hash": "4b8a9e1b34f97959997af80cd6dcaffdaea1b5458f48b2c3656a1795b0038a32",
+      "type": "agent",
+      "source": "C:\\Users\\wlipford\\AppData\\Local\\Programs\\@dev-suitedashboard\\resources\\dev-suite\\agents\\core\\python-expert.md"
+    },
+    {
+      "path": ".claude/agents/ux-expert.md",
+      "hash": "2995b309fdbcffc6298a4ab9fda0a7596dbd8134388179df40a03a3d1c23321f",
+      "type": "agent",
+      "source": "C:\\Users\\wlipford\\AppData\\Local\\Programs\\@dev-suitedashboard\\resources\\dev-suite\\agents\\frontend\\ux-expert.md"
+    },
+    {
+      "path": ".claude/agents/sql-expert.md",
+      "hash": "c5cc18fc1f051291280ea1b04f779997ae2cc1352f56179c43009f288551a0b1",
+      "type": "agent",
+      "source": "C:\\Users\\wlipford\\AppData\\Local\\Programs\\@dev-suitedashboard\\resources\\dev-suite\\agents\\database\\sql-expert.md"
+    },
+    {
+      "path": ".claude/agents/integration-validator-expert.md",
+      "hash": "6c8f632bee4ba6599b4bb4b3713c42e5d41462792c1095387193ed697aeac006",
+      "type": "agent",
+      "source": "C:\\Users\\wlipford\\AppData\\Local\\Programs\\@dev-suitedashboard\\resources\\dev-suite\\agents\\quality\\integration-validator-expert.md"
+    },
+    {
+      "path": ".claude/skills/_README.md",
+      "hash": "34bb4a545ad3b5c2ad6731724f9a078d367cdc684136886dd7c0251e3c4c2ff9",
+      "type": "skill"
+    },
+    {
+      "path": ".mcp-servers/database-query/dist/index.js",
+      "hash": "d6d3e6596a71f1745b2d9479a5974f3eb532f4c05e5db990a7af4d4781afe0ab",
+      "type": "mcp-server",
+      "source": "C:\\Users\\wlipford\\AppData\\Local\\Programs\\@dev-suitedashboard\\resources\\dev-suite\\mcp-servers\\database-query"
+    },
+    {
+      "path": ".mcp-servers/documentation/dist/index.js",
+      "hash": "e7504883618319f16bdd80d8deb4ea340d2e924d2b08005cc7562e73ac5e9f16",
+      "type": "mcp-server",
+      "source": "C:\\Users\\wlipford\\AppData\\Local\\Programs\\@dev-suitedashboard\\resources\\dev-suite\\mcp-servers\\documentation"
+    },
+    {
+      "path": ".mcp-servers/skill-loader/dist/index.js",
+      "hash": "1cdcc0d8ee1dcde868cec42fcb6e7f5a64b040ae9581f7242c3d7d7247a0ec44",
+      "type": "mcp-server",
+      "source": "C:\\Users\\wlipford\\AppData\\Local\\Programs\\@dev-suitedashboard\\resources\\dev-suite\\mcp-servers\\skill-loader"
+    },
+    {
+      "path": ".mcp-servers/security-scanner/dist/index.js",
+      "hash": "83610a20e29c665829ebedde5d66a9774b69a98201f0a126cae3728df93654fa",
+      "type": "mcp-server",
+      "source": "C:\\Users\\wlipford\\AppData\\Local\\Programs\\@dev-suitedashboard\\resources\\dev-suite\\mcp-servers\\security-scanner"
+    },
+    {
+      "path": ".mcp-servers/log-analyzer/dist/index.js",
+      "hash": "6fcb7854895d1ddc524873e33bf45392e86f1e783d0c5dbf10520727ccf6dc85",
+      "type": "mcp-server",
+      "source": "C:\\Users\\wlipford\\AppData\\Local\\Programs\\@dev-suitedashboard\\resources\\dev-suite\\mcp-servers\\log-analyzer"
+    },
+    {
+      "path": ".mcp-servers/code-quality/dist/index.js",
+      "hash": "2607fd6be2c750f6944a3c7e07d0b773e9c56a157b0ad2f9c42937802a4cfb31",
+      "type": "mcp-server",
+      "source": "C:\\Users\\wlipford\\AppData\\Local\\Programs\\@dev-suitedashboard\\resources\\dev-suite\\mcp-servers\\code-quality"
+    },
+    {
+      "path": ".mcp-servers/docker-manager/dist/index.js",
+      "hash": "0da627ea35ecbe1a651243450729c370a5488a24cbf6d31cdad13c40ca6354f3",
+      "type": "mcp-server",
+      "source": "C:\\Users\\wlipford\\AppData\\Local\\Programs\\@dev-suitedashboard\\resources\\dev-suite\\mcp-servers\\docker-manager"
+    },
+    {
+      "path": ".mcp-servers/api-tester/dist/index.js",
+      "hash": "dfbfb3d1188549a5e5476df07099bd86bbc7c5a21e40303e16d1aecd9e9dc7c2",
+      "type": "mcp-server",
+      "source": "C:\\Users\\wlipford\\AppData\\Local\\Programs\\@dev-suitedashboard\\resources\\dev-suite\\mcp-servers\\api-tester"
+    },
+    {
+      "path": ".mcp-servers/api-explorer/dist/index.js",
+      "hash": "6e4deb654706fb12f2c2ca26eea0fec7ec40c7c450b85e42c536630b8699e6b8",
+      "type": "mcp-server",
+      "source": "C:\\Users\\wlipford\\AppData\\Local\\Programs\\@dev-suitedashboard\\resources\\dev-suite\\mcp-servers\\api-explorer"
+    },
+    {
+      "path": ".mcp-servers/performance-profiler/dist/index.js",
+      "hash": "1a07b1d36c2ffdd5454efa878840143f86dd0ac0ab539c89f16eb56e4764a827",
+      "type": "mcp-server",
+      "source": "C:\\Users\\wlipford\\AppData\\Local\\Programs\\@dev-suitedashboard\\resources\\dev-suite\\mcp-servers\\performance-profiler"
+    },
+    {
+      "path": ".mcp.json",
+      "hash": "0cad0dbe90fff9c9224ed2ce426a2a1018670b59a31cec8cd2205a607a4d351b",
+      "type": "config"
+    },
+    {
+      "path": ".dev-suite.json",
+      "hash": "17c77fac4a0127db810fe548cc797fbbee019a399b3e2e6fe6c769273200012a",
+      "type": "config"
+    },
+    {
+      "path": ".claude/settings.json",
+      "hash": "c7c956b974b1a0431a1bb3e5eff7e9be1c52b8f74fb807db9a6fc7cd612bdca2",
+      "type": "config"
+    }
+  ],
+  "upgradeHistory": [],
+  "availableAtInstall": {
+    "agents": [
+      "cpp-expert",
+      "deno-expert",
+      "dotnet-expert",
+      "fastapi-expert",
+      "go-expert",
+      "nestjs-expert",
+      "rust-expert",
+      "spring-boot-expert",
+      "streamlit-expert",
+      "windows-driver-expert",
+      "bitcoin-core-expert",
+      "bitcoin-protocol-expert",
+      "bitcoin-testing-expert",
+      "bitcoin-wallet-expert",
+      "lightning-expert",
+      "cloud-expert",
+      "accessibility-expert",
+      "architect",
+      "claude-code-extension-expert",
+      "code-reviewer",
+      "dashboard-refactor-expert",
+      "documentation-expert",
+      "log-analyst",
+      "nodejs-expert",
+      "performance-expert",
+      "python-expert",
+      "typescript-expert",
+      "data-engineering-expert",
+      "rag-expert",
+      "mongodb-expert",
+      "prisma-expert",
+      "sql-expert",
+      "angular-expert",
+      "creative-frontend-expert",
+      "electron-expert",
+      "nextjs-expert",
+      "react-expert",
+      "svelte-expert",
+      "tauri-expert",
+      "ux-expert",
+      "vue-expert",
+      "unity-expert",
+      "automation-architect",
+      "dcs-analyst",
+      "freelance-engineer",
+      "membrane-expert",
+      "devops-expert",
+      "docker-expert",
+      "sysadmin-expert",
+      "messaging-expert",
+      "android-native-expert",
+      "ios-native-expert",
+      "kmp-expert",
+      "mobile-expert",
+      "integration-validator-expert",
+      "open-source-expert",
+      "qa-expert",
+      "security-expert",
+      "playwright-expert",
+      "python-integration-test-expert",
+      "smoke-test-expert",
+      "spring-boot-integration-test-expert",
+      "vitest-expert"
+    ],
+    "mcpServers": [
+      "api-explorer",
+      "api-tester",
+      "code-quality",
+      "dashboard-bridge",
+      "database-query",
+      "docker-manager",
+      "documentation",
+      "log-analyzer",
+      "performance-profiler",
+      "security-scanner",
+      "skill-loader"
+    ]
+  },
+  "installedRuleFiles": [
+    ".claude/rules/backend.md",
+    ".claude/rules/database.md",
+    ".claude/rules/frontend.md",
+    ".claude/rules/infrastructure.md",
+    ".claude/rules/testing.md"
+  ]
+}
