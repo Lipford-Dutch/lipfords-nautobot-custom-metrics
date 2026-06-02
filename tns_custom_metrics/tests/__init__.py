@@ -1,34 +1,8 @@
-"""Unit tests for tns_custom_metrics app."""
+"""Unit and integration tests for the tns_custom_metrics app.
 
-import pkgutil
-
-import pytest
-
-if not (pkgutil.find_loader("django") and pkgutil.find_loader("nautobot")):
-    pytest.skip("Django or Nautobot not installed", allow_module_level=True)
-
-from django.conf import settings
-
-if not settings.configured:
-    settings.configure(
-        SECRET_KEY="testing",
-        INSTALLED_APPS=[
-            "django.contrib.contenttypes",
-            "django.contrib.auth",
-            "django.contrib.sessions",
-            "rest_framework",
-            "nautobot.users",
-            "nautobot.extras",
-            "tns_custom_metrics",
-        ],
-        DATABASES={
-            "default": {"ENGINE": "django.db.backends.sqlite3", "NAME": ":memory:"}
-        },
-        ROOT_URLCONF="tns_custom_metrics.urls",
-        ALLOWED_URL_SCHEMES=["http", "https"],
-        USE_TZ=True,
-    )
-
-    import django
-
-    django.setup()
+These tests are designed to run inside a configured Nautobot environment, i.e.
+via ``nautobot-server test tns_custom_metrics`` (or ``invoke unittest``), which
+loads settings from ``NAUTOBOT_CONFIG`` and provisions an isolated test
+database. Settings are intentionally *not* configured here so the active
+Nautobot configuration is always used.
+"""

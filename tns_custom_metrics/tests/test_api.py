@@ -1,19 +1,15 @@
-"""Unit tests for tns_custom_metrics."""
+"""Smoke tests for the Nautobot REST API with tns_custom_metrics installed."""
 
-import pytest
+from django.test import TestCase
+from django.urls import reverse
+from rest_framework import status
+from rest_framework.test import APIClient
 
-pytest.importorskip("nautobot")
-
-from django.conf import settings
-
-if not hasattr(settings, "CELERY_TASK_DEFAULT_QUEUE"):
-    pytest.skip("Celery not configured", allow_module_level=True)
-
-User = get_user_model()
+from .factories import TokenFactory, UserFactory
 
 
-class PlaceholderAPITest(APITestCase):
-    """Test the NautobotCapacityMetrics API."""
+class PlaceholderAPITest(TestCase):
+    """Verify the Nautobot REST API responds correctly while the app is installed."""
 
     def setUp(self):
         """Create a superuser and token for API calls."""
@@ -22,7 +18,7 @@ class PlaceholderAPITest(APITestCase):
         self.client = APIClient()
         self.client.credentials(HTTP_AUTHORIZATION=f"Token {self.token.key}")
 
-    def test_placeholder(self):
+    def test_list_devices(self):
         """Verify that devices can be listed."""
         url = reverse("dcim-api:device-list")
         response = self.client.get(url)

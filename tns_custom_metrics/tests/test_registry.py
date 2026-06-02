@@ -1,30 +1,22 @@
 """Test cases for tns_custom_metrics app metric function registry."""
 
-import pytest
-
-import pytest
-
-pytest.importorskip("nautobot")
+import unittest
 
 from tns_custom_metrics import __REGISTRY__, register_metric_func
 
-pytest.importorskip("nautobot")
 
-from tns_custom_metrics import __REGISTRY__, register_metric_func  # noqa: E402
-
-
-def test_register_metric_func():
+class RegisterMetricFuncTestCase(unittest.TestCase):
     """Ensure functions can be registered and invalid types are rejected."""
 
-    def myfunction():
-        """Dummy metric function."""
+    def test_register_metric_func(self):
+        """Functions can be registered; non-callables raise ``TypeError``."""
 
-    with pytest.raises(TypeError):
-        register_metric_func("test")
-    with pytest.raises(TypeError):
-        register_metric_func({"test": "test"})
-    with pytest.raises(TypeError):
-        register_metric_func([1, 2, 3])
+        def myfunction():
+            """Dummy metric function."""
 
-    register_metric_func(myfunction)
-    assert __REGISTRY__[-1] is myfunction
+        for invalid in ("test", {"test": "test"}, [1, 2, 3]):
+            with self.assertRaises(TypeError):
+                register_metric_func(invalid)
+
+        register_metric_func(myfunction)
+        self.assertIs(__REGISTRY__[-1], myfunction)

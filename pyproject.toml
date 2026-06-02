@@ -16,6 +16,8 @@ classifiers = [
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
 ]
 packages = [
     { include = "tns_custom_metrics" },
@@ -26,12 +28,15 @@ include = [
 ]
 
 [tool.poetry.dependencies]
-python = ">=3.10,<3.13"
-# Used for local development
-nautobot = "^2.4.34"
+# Nautobot 3.x (and thus Python 3.13/3.14 support) requires Python >=3.10,<3.15.
+# Nautobot 2.x is capped at Python <3.13, so it cannot run on the requested Python 3.14.
+python = ">=3.10,<3.15"
+# Used for local development. Nautobot 3.x is the first release line to support Python 3.14.
+nautobot = "^3.1.0"
 
 [tool.poetry.group.dev.dependencies]
 coverage = "*"
+factory-boy = "*"
 django-debug-toolbar = "*"
 django-prometheus = "*"
 invoke = "*"
@@ -87,7 +92,7 @@ notes = """,
 
 [tool.pylint-nautobot]
 supported_nautobot_versions = [
-    "2.4.34"
+    "3.1.0"
 ]
 
 [tool.ruff]
@@ -197,3 +202,4 @@ markers = [
     "unit: unit tests",
     "integration: integration tests",
 ]
+
