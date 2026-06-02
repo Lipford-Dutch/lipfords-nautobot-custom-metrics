@@ -51,9 +51,9 @@ namespace = Collection("tns_custom_metrics")
 namespace.configure(
     {
         "tns_custom_metrics": {
-            "nautobot_ver": "2.3.1",
+            "nautobot_ver": "3.1.3",
             "project_name": "tns-custom-metrics",
-            "python_ver": "3.11",
+            "python_ver": "3.12",
             "local": False,
             "compose_dir": os.path.join(os.path.dirname(__file__), "development"),
             "compose_files": [
