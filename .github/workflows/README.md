@@ -33,12 +33,20 @@ turned off from a commit:
    turning off automatic PR reviews for this repository. It otherwise runs on
    every PR open / "mark ready" / `@codex review` comment.
 
-2. **In-progress Actions runs.**
+2. **CodeQL "default setup" code scanning.**
+   The `Analyze (python)` / `Analyze (actions)` jobs are GitHub Advanced
+   Security CodeQL runs configured in **Settings → Code security → Code
+   scanning → CodeQL analysis** as a *managed default setup* — they are
+   **not** defined by any workflow file in this repo, so deleting the
+   workflows above does not stop them. They run on every push/PR. To stop
+   them, switch CodeQL default setup to *Disabled* in that settings page.
+
+3. **In-progress Actions runs.**
    Automation here lacks permission to cancel runs (the API returns
    `403 Resource not accessible by integration`). Cancel any still-running
    jobs manually from the repo's **Actions** tab if needed.
 
-3. **Dependabot (optional).**
+4. **Dependabot (optional).**
    `.github/dependabot.yml` schedules dependency-update jobs that consume
    runner minutes and open PRs (which in turn can trigger the code reviewer).
    To pause it, comment out / remove the schedules in that file, or disable
