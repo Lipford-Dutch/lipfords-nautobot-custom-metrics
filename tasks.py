@@ -51,7 +51,7 @@ namespace = Collection("tns_custom_metrics")
 namespace.configure(
     {
         "tns_custom_metrics": {
-            "nautobot_ver": "2.3.1",
+            "nautobot_ver": "2.4.34",
             "project_name": "tns-custom-metrics",
             "python_ver": "3.11",
             "local": False,
