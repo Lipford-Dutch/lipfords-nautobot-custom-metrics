@@ -31,10 +31,7 @@ sudo systemctl restart nautobot nautobot-worker nautobot-scheduler
 ## Development Environment
 
 ```shell
-poetry shell
-poetry install
-cp development/creds.example.env development/creds.env
-invoke build && invoke start
+./setup_dev_env.sh
 ```
 
 Visit <http://localhost:8080> for Nautobot and <http://localhost:8001> for docs.
