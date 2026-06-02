@@ -1,28 +1,65 @@
 #!/bin/bash
-# Setup the Nautobot custom metrics development environment
-# Based on docs/dev/dev_environment.md Quickstart instructions
-set -e
+# Setup the Nautobot custom metrics development environment.
+# Aligned to Nautobot plugin development guidance and this repo's documented workflow.
+set -euo pipefail
 
-# Ensure required tools are installed
-command -v poetry >/dev/null 2>&1 || { echo >&2 "Poetry is required. Install from https://python-poetry.org/docs/#installation"; exit 1; }
-command -v docker >/dev/null 2>&1 || { echo >&2 "Docker is required. Install from https://docs.docker.com/get-docker/"; exit 1; }
-command -v docker-compose >/dev/null 2>&1 || { echo >&2 "docker-compose is required. Install from https://github.com/docker/compose"; exit 1; }
+ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cd "$ROOT_DIR"
 
-# Install dependencies
-poetry install
+require_command() {
+  local cmd="$1"
+  local hint="$2"
+  command -v "$cmd" >/dev/null 2>&1 || {
+    echo "ERROR: Required command '$cmd' is not installed. $hint" >&2
+    exit 1
+  }
+}
 
-# Copy example credentials if missing
-if [ ! -f development/creds.env ]; then
-  cp development/creds.example.env development/creds.env
+require_command poetry "Install from https://python-poetry.org/docs/#installation"
+require_command docker "Install from https://docs.docker.com/get-docker/"
+
+if command -v docker-compose >/dev/null 2>&1; then
+  COMPOSE_CMD=(docker-compose)
+elif docker compose version >/dev/null 2>&1; then
+  COMPOSE_CMD=(docker compose)
+else
+  echo "ERROR: Docker Compose is required (either 'docker-compose' or 'docker compose')." >&2
+  exit 1
 fi
 
-# Build and start Nautobot
+if [ ! -f "development/development.env" ]; then
+  echo "ERROR: Missing required file development/development.env" >&2
+  exit 1
+fi
+
+if [ ! -f "development/creds.env" ]; then
+  cat > development/creds.env <<'CREDS'
+# Local development-only placeholder credentials.
+# Replace these values as needed for your environment.
+NAUTOBOT_DB_PASSWORD=nautobot
+NAUTOBOT_REDIS_PASSWORD=
+NAUTOBOT_SECRET_KEY=dev-not-for-production-change-me
+NAUTOBOT_NAPALM_USERNAME=
+NAUTOBOT_NAPALM_PASSWORD=
+CREDS
+  echo "Created development/creds.env with safe local defaults."
+fi
+
+poetry install
+
+# Validate Docker Compose configuration before building/starting.
+"${COMPOSE_CMD[@]}" -f development/docker-compose.base.yml -f development/docker-compose.dev.yml config >/dev/null
+
 poetry run invoke build
 poetry run invoke start
 
 cat <<MSG
 Environment started.
-Nautobot available at http://localhost:8080
-Documentation available at http://localhost:8001
-Use 'poetry run invoke stop' to stop containers and 'poetry run invoke destroy' to remove them.
+Nautobot:      http://localhost:8080
+Documentation: http://localhost:8001
+
+Useful commands:
+  poetry run invoke stop
+  poetry run invoke destroy
+  ${COMPOSE_CMD[*]} ps
 MSG

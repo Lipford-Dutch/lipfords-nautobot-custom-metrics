@@ -6,8 +6,16 @@ pytest.importorskip("opentelemetry")
 from opentelemetry import trace
 from opentelemetry.sdk.trace import TracerProvider
 
-import instrumentation.otel_config as otel_config
-from instrumentation.otel_config import setup_tracing
+pytestmark = pytest.mark.unit
+
+try:  # pragma: no cover - optional dependency
+    from opentelemetry import trace
+    from opentelemetry.sdk.trace import TracerProvider
+except ModuleNotFoundError:  # pragma: no cover - skip if missing
+    pytest.skip("opentelemetry not installed", allow_module_level=True)
+
+import instrumentation.otel_config as otel_config  # noqa: E402
+from instrumentation.otel_config import setup_tracing  # noqa: E402
 
 
 def test_setup_tracing_sets_provider(monkeypatch):

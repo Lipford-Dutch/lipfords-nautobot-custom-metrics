@@ -17,15 +17,14 @@ except NoReverseMatch:
     pytest.skip("Nautobot plugin API not configured", allow_module_level=True)
 
 
-class AppMetricEndpointTests(TestCase):
+class AppMetricEndpointTests(APITestCase):
     """Test cases for ensuring application metric endpoint is working properly."""
 
     app_metric_url = APP_METRIC_URL
 
     def test_endpoint(self):
         """Ensure the endpoint is working properly and is not protected by authentication."""
-        client = APIClient()
-        resp = client.get(self.app_metric_url)
+        resp = self.client.get(self.app_metric_url)
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
 
     def test_model_count_metrics(self):

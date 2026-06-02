@@ -9,23 +9,16 @@ from django.conf import settings
 if not hasattr(settings, "CELERY_TASK_DEFAULT_QUEUE"):
     pytest.skip("Celery not configured", allow_module_level=True)
 
-from django.contrib.auth import get_user_model
-from django.test import TestCase
-from django.urls import reverse
-from nautobot.users.models import Token
-from rest_framework import status
-from rest_framework.test import APIClient
-
 User = get_user_model()
 
 
-class PlaceholderAPITest(TestCase):
+class PlaceholderAPITest(APITestCase):
     """Test the NautobotCapacityMetrics API."""
 
     def setUp(self):
         """Create a superuser and token for API calls."""
-        self.user = User.objects.create(username="testuser", is_superuser=True)
-        self.token = Token.objects.create(user=self.user)
+        self.user = UserFactory()
+        self.token = TokenFactory(user=self.user)
         self.client = APIClient()
         self.client.credentials(HTTP_AUTHORIZATION=f"Token {self.token.key}")
 

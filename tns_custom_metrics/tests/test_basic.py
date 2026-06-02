@@ -1,16 +1,18 @@
 """Basic tests that do not require Django."""
 
 import os
-import unittest
 
 try:
     import tomllib as toml
 except ModuleNotFoundError:  # Python <3.11
     import tomli as toml
 
+try:
+    import tomllib as toml
+except ModuleNotFoundError:  # Python <3.11
+    import tomli as toml
 
-class TestDocsPackaging(unittest.TestCase):
-    """Test Version in doc requirements is the same pyproject."""
+pytestmark = pytest.mark.unit
 
     def test_version(self):
         """Verify that pyproject.toml dev dependencies have the same versions as in the docs requirements.txt."""

@@ -36,11 +36,7 @@ This project is managed by [Python Poetry](https://python-poetry.org/) and has a
 Once you have Poetry and Docker installed you can run the following commands (in the root of the repository) to install all other development dependencies in an isolated Python virtual environment:
 
 ```shell
-poetry shell
-poetry install
-cp development/creds.example.env development/creds.env
-invoke build
-invoke start
+./setup_dev_env.sh
 ```
 
 The Nautobot server can now be accessed at [http://localhost:8080](http://localhost:8080) and the live documentation at [http://localhost:8001](http://localhost:8001).
@@ -162,7 +158,7 @@ This project is set up with a number of **Invoke** tasks consumed as simple CLI 
 First, you need to create the `development/creds.env` file - it stores a bunch of private information such as passwords and tokens for your local Nautobot install. You can make a copy of the `development/creds.example.env` and modify it to suit you.
 
 ```shell
-cp development/creds.example.env development/creds.env
+./setup_dev_env.sh
 ```
 
 ### Invoke - Building the Docker Image

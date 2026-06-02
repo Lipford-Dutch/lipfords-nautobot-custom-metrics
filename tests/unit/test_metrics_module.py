@@ -72,7 +72,7 @@ def load_metrics():
     return importlib.import_module("tns_custom_metrics.metrics")
 
 
-def test_collect_extras_metric():
+def test_collect_extras_metric(metrics_module):
     """Ensure extra metric functions are executed and collected."""
     mod = load_metrics()
     gauge = GaugeMetricFamily("x", "x")
